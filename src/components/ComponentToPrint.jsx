@@ -47,29 +47,19 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
                     <span className="text-xs font-roboto">Keterangan:</span>
                     <span className="text-xs font-roboto text-right">{note}</span> 
                   </div>
-                  {/* <div className="mt-2"> */}
-                    {/* <div  className="mt-2 flex flex-col items-end space-y-2"> */}
                     {items.map((item) => (
-                        <tr 
-                          className="text-xs border-t border-black/10 py-2"
+                        <div
+                          className="mt-0 flex flex-col items-end"
                           key={item.id}>
-                          <div className="mt-1 w-full"> 
+                          <div className="mt-0 mb-0 w-full"> 
                             <span className="text-xs font-roboto">{item.name}</span>
                           </div>
-                          {/* <div className="mt-2 flex flex-col items-end space-y-1"> */}
-                            <div className="mt-0 w-full grid grid-cols-2 justify-between">
+                            <div className="mt-0 mb-0 w-full grid grid-cols-2 justify-between">
                               <span className="text-left text-xs font-roboto">{item.qty} jasa x {numberWithCommas(item.price)}</span>
                               <span className="text-right text-xs font-roboto">{numberWithCommas(item.price * item.qty)}</span>
                             </div>
-                            {/* <div className="flex w-full justify-between">
-                              <span className="text-xs font-roboto">ITEM</span>
-                              <span className="text-xs font-roboto">{item.qty}</span>
-                            </div> */}
-                          {/* </div> */}
-                        </tr>
+                        </div>
                       ))}
-                    {/* </div> */}
-                  {/* </div> */}
                   <div className="mt-0 flex flex-col items-end border-t border-black/10 py-2">
                     <div className="flex w-full mt-0 justify-between">
                       <span className="text-xs font-roboto">ITEM:</span>
@@ -95,11 +85,12 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
                       <span className="text-xs font-roboto">KEMBALI</span>
                       <span className="text-xs font-roboto">{kembali}</span>
                     </div>
-                    <div className="flex w-full mt-2 justify-between">
-                      <span className="mb-0 text-xs font-roboto text-center">TERIMAKASIH</span>
+                    <div className="flex w-full mt-0 text-center">
+                        <h4 className="mt- text-xs font-roboto text-left">TERIMAKASIH</h4>
                     </div>
                   </div>
                 </div>
+                
               </div>
           </div>
       // </div>

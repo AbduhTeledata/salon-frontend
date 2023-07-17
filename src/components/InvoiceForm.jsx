@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSelector } from "react-redux";
 import AddCart from './AddCart';
 import EditItem from './EditItem';
@@ -38,10 +38,17 @@ const InvoiceForm = (props) => {
   const [isMutating, setIsMutating] = useState(false);
   const [products, setProducts] = useState([]);
   const [qty, setQty] = useState();
-  const [tunai, setTunai] = useState(0);
-  const [kembali, setKembali] = useState(0);
+  
+  const [tunai, setTunai] = useState('');
+  const [kembali, setKembali] = useState('');
+  // const [total, setTotal] = useState('');
+  // const [subtotal, setSubTotal] = useState('');
+  // const [total,setTotal]=useState('');
+
   const [msg, setMsg] = useState("");
+
   const [items, setItems] = useState([]);
+  
   
   function updateItem(id, newName, newQty, newPrice){
     const updateItem = items.map((item) => {
@@ -172,20 +179,67 @@ function newItem(name, qty, price){
       return prev + Number(curr.price * Math.floor(curr.qty));
     else return prev;
   }, 0);
-  const taxRate = (tax * subtotal) / 100;
-  const discountRate = (discount * subtotal) / 100;
-  const total = subtotal - discountRate + taxRate;
-  // const kembali = tunai - total;
 
-  const handleKembali = () => {
-    let newKembali = 0;
-    if (tunai === 0){
-      setKembali = 0;
-    }else{
-      newKembali = tunai - total;
-    }
-    setKembali(newKembali);
-  };
+  // const taxRate = (tax * subtotal) / 100;
+  // const discountRate = (discount * subtotal) / 100;
+  const total = subtotal - discount;
+
+  // useEffect(() => {
+  //   setSubTotal(newSubtotal);
+  //   setDiscount(discount);
+  //   const newTotal = newSubtotal - discount;
+  //   setTotal(newTotal);
+  //   setTunai(tunai);
+  //   const newkembali = tunai - newTotal;
+  //   setKembali(newkembali);
+
+  //   console.log(newTotal);
+  //   console.log(subtotal)
+  //   console.log(newkembali);
+  //   console.log(discount);
+  //   console.log(tunai)
+    
+  //   // const taxRate = (tax * subtotal) / 100;
+  //   // const discountRate = (discount * subtotal) / 100;
+   
+  
+  
+  // }, [total, subtotal, discount, kembali]);
+
+  
+//   const onChangeTunai=(e)=>{
+//     let name=e.target.name;
+//     let value=e.target.value;
+//     const newValues = {
+//     ...values, [name]: value
+//   } 
+//   setValues(newValues)
+//   calcSum(newValues)
+//   // calcfirst(newValues)
+//   // calcSecond(newValues)
+// }
+
+// const calcSum = (newValues) => {
+//   const { tunai, subtotal, discount } = newValues;
+//   const total = subtotal - discount;
+//   const newSum = parseInt(tunai,10);
+//   setKembali(newSum);
+//   console.log("total:" + subtotal);
+// } 
+// - parseInt(total,10);
+
+  // const calcfirst = (newValues) => {
+  // const { sum, kembali} = newValues;
+  // const newFirst = parseInt(sum,10)-parseInt(kembali,10)
+  // setFirst(newFirst)
+  // } 
+  
+  // const calcSecond = (newValues) => {
+  // const { sum, tunai} = newValues;
+  // const newSecond = parseInt(sum,10)-parseInt(tunai,10)
+  // setSecond(newSecond)
+  // } 
+
  
   return (
     <div>
@@ -252,6 +306,7 @@ function newItem(name, qty, price){
               </label>
               <div className="flex items-center">
                 <input
+                  required
                   className="w-full rounded-r-none bg-white shadow-sm"
                   type="text"
                   name="customer"
@@ -274,6 +329,7 @@ function newItem(name, qty, price){
               </label>
               <div className="flex items-center">
                 <input
+                  required
                   className="w-full rounded-r-none bg-white shadow-sm"
                   type="text"
                   name="terapis"
@@ -296,6 +352,7 @@ function newItem(name, qty, price){
               </label>
               <div className="flex items-center">
                 <input
+                  required
                   className="w-full rounded-r-none bg-white shadow-sm"
                   type="text"
                   name="note"
@@ -347,12 +404,12 @@ function newItem(name, qty, price){
         <div className="flex flex-col items-end space-y-2 pt-6">
           <div className="flex w-full justify-between md:w-1/2">
             <span className="font-bold">Subtotal:</span>
-            <span>Rp.{numberWithCommas(subtotal)}</span>
+            <span>{numberWithCommas(subtotal)}</span>
           </div>
           <div className="flex w-full justify-between md:w-1/2">
             <span className="font-bold">Discount:</span>
             <span>
-              ({discount || '0'})Rp.{discountRate}
+              {numberWithCommas(discount)}
             </span>
           </div>
           {/* <div className="flex w-full justify-between md:w-1/2">
@@ -369,7 +426,6 @@ function newItem(name, qty, price){
           </div>
         </div>
       </div>
-      
       <div className="basis-1/4 bg-transparent">
         <div className="sticky top-0 z-10 space-y-4 divide-y divide-gray-900/10 pb-8 md:pt-6 md:pl-4">
         <button
@@ -388,7 +444,7 @@ function newItem(name, qty, price){
               <ComponentToPrint 
                 invoiceNumber={invoiceNumber} 
                 customerName={customerName}
-                discountRate={discountRate}
+                discountRate={discount}
                 items={items} 
                 total={total} 
                 note={note}
@@ -407,13 +463,11 @@ function newItem(name, qty, price){
               <div className="flex items-center">
                 <input
                   className="w-full rounded-r-none bg-white shadow-sm"
-                  type="number"
+                  type="text"
                   name="discount"
                   id="discount"
-                  min="0"
-                  step="0.01"
-                  placeholder="0.0"
-                  value={numberWithCommas(discount)}
+                  placeholder="0"
+                  value={discount}
                   onChange={(event) => setDiscount(event.target.value)}
                 />
                 <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
@@ -432,8 +486,9 @@ function newItem(name, qty, price){
                   name="tunai"
                   id="tunai"
                   placeholder="0"
-                  value={tunai}
+                  defaultValue={tunai}
                   onChange={(e) => setTunai(e.target.value)}
+                  disabled
                 />
                 <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
                   Rp.
@@ -452,6 +507,7 @@ function newItem(name, qty, price){
                   id="kembali"
                   placeholder="0"
                   value={numberWithCommas(kembali)}
+                  onChange={(e) => setKembali(e.target.value)}
                   disabled
                 />
                 <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
@@ -468,7 +524,7 @@ function newItem(name, qty, price){
         qty: qty, 
         subtotal, 
         discount, 
-        taxRate, 
+        tax, 
         total,
         kodemember: customerName,
         iscard: iscard,

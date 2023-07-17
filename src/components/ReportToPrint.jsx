@@ -20,7 +20,7 @@ export const ReportToPrint = React.forwardRef((props, ref) => {
       <h4 className="px-200 text-sm text-gray-900">
          Jalan Paledang No.152F Cibereum-Bandung Telp/WA: 081222314411
       </h4>
-          <table className='min-w-full text-left text-sm dark:border-neutral-500'>
+          <table className='min-w-full text-left text-xs dark:border-neutral-500'>
                   <thead className='border-b font-medium dark:border-neutral-500'>
                     <tr>
                       <th scope="col" className="border-r dark:border-neutral-500">No</th>
@@ -50,13 +50,16 @@ export const ReportToPrint = React.forwardRef((props, ref) => {
                       <td className="whitespace-nowrap border-r dark:border-neutral-500 text-right">{numberWithCommas(order.total_disc)}</td>
                       <td className="whitespace-nowrap border-r dark:border-neutral-500 text-right">{numberWithCommas(order.total_price)}</td>
                       <td className="whitespace-nowrap border-r dark:border-neutral-500">{order.terapis}</td>
-                      
                     </tr>
                     );
                   })}
                   </tbody>
+                  
             </table>
-            <h2 className='px-20 text-xl text-right'>Total Harga: Rp.{numberWithCommas(totalPrice)}</h2>
+            <div className='col-span-4'>
+                    <h4 className='px-20 text-sm text-right'>Total: {numberWithCommas(totalPrice)}</h4>
+            </div>
+            
       </div>
   )
 });
