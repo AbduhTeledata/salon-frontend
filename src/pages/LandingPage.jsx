@@ -6,9 +6,9 @@ const LandingPage = () => {
   return (
     <div>
       <nav
-        className="flex-no-wrap relative flex w-full items-center justify-between bg-neutral-100 py-2 shadow-md shadow-black/5 dark:bg-neutral-600 dark:shadow-black/10 lg:flex-wrap lg:justify-start lg:py-4"
+        className="flex-no-wrap relative flex w-full items-center justify-between bg-neutral-100 py-0 shadow-md shadow-black/5 dark:bg-neutral-600 dark:shadow-black/10 lg:flex-wrap lg:justify-start lg:py-0"
         data-te-navbar-ref>
-        <div className="flex w-full flex-wrap items-center justify-between px-3">
+        <div className="flex w-full flex-wrap items-center justify-between px-5">
           {/* <!-- Hamburger button for mobile view --> */}
           <button
             className="block border-0 bg-transparent px-2 text-neutral-500 hover:no-underline hover:shadow-none focus:no-underline focus:shadow-none focus:outline-none focus:ring-0 dark:text-neutral-200 lg:hidden"
@@ -44,25 +44,25 @@ const LandingPage = () => {
               href="/login">
               <img
                 src={logo}
-                width="35px"
-                height="35px"
+                width="30px"
+                height="30px"
                 className="d-inline-block align-top"
                 alt="Kyoshi salon logo"
               /> {'  '}
-              <h3><strong>Kyoshi Beauty</strong></h3>
+              <h4><strong>Kyoshi Beauty</strong></h4>
             </a>
             {/* <!-- Left navigation links --> */}
-            <ul
+            {/* <ul
               className="list-style-none mr-auto flex flex-col pl-0 lg:flex-row"
               data-te-navbar-nav-ref>
-              <li className="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref>
+              <li className="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref> */}
                 {/* <!-- Dashboard link --> */}
-                <a
+                {/* <a
                   className="text-neutral-500 hover:text-neutral-700 focus:text-neutral-700 disabled:text-black/30 dark:text-neutral-200 dark:hover:text-neutral-300 dark:focus:text-neutral-300 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-zinc-400"
                   href="/login"
                   data-te-nav-link-ref
                   >Dashboard</a>
-              </li>
+              </li> */}
               {/* <!-- Team link --> */}
               {/* <li class="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref>
                 <a
@@ -79,7 +79,7 @@ const LandingPage = () => {
                   data-te-nav-link-ref
                   >Projects</a>
               </li> */}
-            </ul>
+            {/* </ul> */}
           </div>
 
           {/* <!-- Right elements --> */}

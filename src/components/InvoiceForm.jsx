@@ -25,7 +25,7 @@ const InvoiceForm = (props) => {
   const { user } = useSelector((state) => state.auth);
   const [discount, setDiscount] = useState(0);
   const [tax, setTax] = useState('');
-  const [invoiceNumber, setInvoiceNumber] = useState("INV0000000");
+  const [invoiceNumber, setInvoiceNumber] = useState("INV00000001");
   const [cashierName, setCashierName] = useState('');
   const [customerName, setCustomerName] = useState('');
   const [branchId, setBranchId] = useState(1);
@@ -38,6 +38,8 @@ const InvoiceForm = (props) => {
   const [isMutating, setIsMutating] = useState(false);
   const [products, setProducts] = useState([]);
   const [qty, setQty] = useState();
+  const [tunai, setTunai] = useState(0);
+  const [kembali, setKembali] = useState(0);
   const [msg, setMsg] = useState("");
   const [items, setItems] = useState([]);
   
@@ -173,7 +175,18 @@ function newItem(name, qty, price){
   const taxRate = (tax * subtotal) / 100;
   const discountRate = (discount * subtotal) / 100;
   const total = subtotal - discountRate + taxRate;
+  // const kembali = tunai - total;
 
+  const handleKembali = () => {
+    let newKembali = 0;
+    if (tunai === 0){
+      setKembali = 0;
+    }else{
+      newKembali = tunai - total;
+    }
+    setKembali(newKembali);
+  };
+ 
   return (
     <div>
     <form
@@ -334,24 +347,24 @@ function newItem(name, qty, price){
         <div className="flex flex-col items-end space-y-2 pt-6">
           <div className="flex w-full justify-between md:w-1/2">
             <span className="font-bold">Subtotal:</span>
-            <span>Rp.{subtotal.toFixed(2)}</span>
+            <span>Rp.{numberWithCommas(subtotal)}</span>
           </div>
           <div className="flex w-full justify-between md:w-1/2">
             <span className="font-bold">Discount:</span>
             <span>
-              ({discount || '0'})Rp.{discountRate.toFixed(2)}
+              ({discount || '0'})Rp.{discountRate}
             </span>
           </div>
-          <div className="flex w-full justify-between md:w-1/2">
+          {/* <div className="flex w-full justify-between md:w-1/2">
             <span className="font-bold">Tax & Service:</span>
             <span>
               ({tax || '0'}Rp{taxRate.toFixed(2)}
             </span>
-          </div>
+          </div> */}
           <div className="flex w-full justify-between border-t border-gray-900/10 pt-2 md:w-1/2">
             <span className="font-bold">Total:</span>
             <span className="font-bold">
-              {total % 1 === 0 ? total : total.toFixed(2)}
+              {numberWithCommas(total) % 1 === 0 ? numberWithCommas(total) : numberWithCommas(total)}
             </span>
           </div>
         </div>
@@ -374,37 +387,16 @@ function newItem(name, qty, price){
           <div style={{display: "none"}}>
               <ComponentToPrint 
                 invoiceNumber={invoiceNumber} 
-                branchId={branchId} 
                 customerName={customerName}
                 discountRate={discountRate}
-                taxRate={taxRate}
                 items={items} 
                 total={total} 
                 note={note}
+                tunai={tunai}
+                kembali={kembali}
                 ref={componentRef}/>
           </div>
           <div className="space-y-4 py-2">
-            <div className="space-y-2">
-              <label className="text-sm font-bold md:text-base" htmlFor="tax">
-                Tax & Service:
-              </label>
-              <div className="flex items-center">
-                <input
-                  className="w-full rounded-r-none bg-white shadow-sm"
-                  type="number"
-                  name="tax"
-                  id="tax"
-                  min="0.01"
-                  step="0.01"
-                  placeholder="0.0"
-                  value={tax}
-                  onChange={(event) => setTax(event.target.value)}
-                />
-                <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
-                  Rp.
-                </span>
-              </div>
-            </div>
             <div className="space-y-2">
               <label
                 className="text-sm font-bold md:text-base"
@@ -421,15 +413,52 @@ function newItem(name, qty, price){
                   min="0"
                   step="0.01"
                   placeholder="0.0"
-                  value={discount}
+                  value={numberWithCommas(discount)}
                   onChange={(event) => setDiscount(event.target.value)}
                 />
                 <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
                   Rp.
                 </span>
               </div>
+            </div> 
+            <div className="space-y-2">
+              <label className="text-sm font-bold md:text-base" htmlFor="tunai">
+                Tunai:
+              </label>
+              <div className="flex items-center">
+                <input
+                  className="w-full rounded-r-none bg-white shadow-sm"
+                  type="text"
+                  name="tunai"
+                  id="tunai"
+                  placeholder="0"
+                  value={tunai}
+                  onChange={(e) => setTunai(e.target.value)}
+                />
+                <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
+                  Rp.
+                </span>
+              </div>
             </div>
-           
+            <div className="space-y-2">
+              <label className="text-sm font-bold md:text-base" htmlFor="kembali">
+                Kembali:
+              </label>
+              <div className="flex items-center">
+                <input
+                  className="w-full rounded-r-none bg-white shadow-sm"
+                  type="text"
+                  name="kembali"
+                  id="kembali"
+                  placeholder="0"
+                  value={numberWithCommas(kembali)}
+                  disabled
+                />
+                <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
+                  Rp.
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ module.exports = {
         merchant: ["Merchant-Copy-Doublesize"],
       },
       fontSize: {
-        xs: '0.6rem',
+        xs: '0.62rem',
         sm: '0.8rem',
         base: '1rem',
         xl: '1.10rem',
