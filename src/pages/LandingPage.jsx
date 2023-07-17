@@ -49,7 +49,7 @@ const LandingPage = () => {
                 className="d-inline-block align-top"
                 alt="Kyoshi salon logo"
               /> {'  '}
-              <h3><strong>Salon Kyoshi</strong></h3>
+              <h3><strong>Kyoshi Beauty</strong></h3>
             </a>
             {/* <!-- Left navigation links --> */}
             <ul

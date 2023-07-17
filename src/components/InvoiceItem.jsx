@@ -114,7 +114,10 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem, onClickIt
           </svg>
         </button>
       </td>
-    </tr>
+      <>{console.log({ qty: qty, })}</>
+     </tr>
+    
+     
   );
 };
 

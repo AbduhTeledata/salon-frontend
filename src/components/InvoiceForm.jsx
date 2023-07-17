@@ -32,7 +32,7 @@ const InvoiceForm = (props) => {
   const [kodemember, setKodeMember] = useState("KYOSHI");
   const [note, setNote] = useState("Keterangan");
   const [terapis, setTerapis] = useState("Terapis");
-  const [productId, setProductId] = useState(props.id);
+  const [productId, setProductId] = useState();
   const [iscard, setIsCard] = useState("M");
   const [modal, setModal] = useState(false);
   const [isMutating, setIsMutating] = useState(false);
@@ -59,9 +59,9 @@ function newItem(name, qty, price){
         price: price,
     }
     setItems([...items, newItem])
-    // setProductId(newItem.id)
+    setProductId(newItem.id)
     // setQty(newItem.qty);
-    console.log(newItem);
+    console.log("newItem QTY:" + newItem.qty);
 };
 
   const reviewInvoiceHandler = (event) => {
@@ -134,6 +134,8 @@ function newItem(name, qty, price){
     });
 
     setItems(newItems);
+    // setQty(newItems.qty);
+    console.log("EditItem QTY:" + newItems.qty);
   };
 
   const saveOrder = async (e) => {
@@ -219,8 +221,8 @@ function newItem(name, qty, price){
                   type="text"
                   name="operator"
                   id="operator"
-                  placeholder="Keterangan"
-                  value={user.name}
+                  placeholder="Operator"
+                  value={user && user.name}
                   onChange={(event) => setCashierName(event.target.value)}
                 />
                 <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
@@ -318,6 +320,7 @@ function newItem(name, qty, price){
               />
               
             ))}
+            <>{console.log("Items:" + items)}</>
           </tbody>
         </table>
         {/* <button
@@ -353,6 +356,7 @@ function newItem(name, qty, price){
           </div>
         </div>
       </div>
+      
       <div className="basis-1/4 bg-transparent">
         <div className="sticky top-0 z-10 space-y-4 divide-y divide-gray-900/10 pb-8 md:pt-6 md:pl-4">
         <button
@@ -432,7 +436,7 @@ function newItem(name, qty, price){
     </form>
     {console.log({
         invoiceNumber, 
-        qty, 
+        qty: qty, 
         subtotal, 
         discount, 
         taxRate, 
