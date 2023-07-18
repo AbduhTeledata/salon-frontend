@@ -17,6 +17,7 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
     const {
         invoiceNumber,
         customerName,
+        discount,
         items,
         total,
         note,
@@ -55,8 +56,8 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
                             <span className="text-xs font-roboto">{item.name}</span>
                           </div>
                             <div className="mt-0 mb-0 w-full grid grid-cols-2 justify-between">
-                              <span className="text-left text-xs font-roboto">{item.qty} jasa x {numberWithCommas(item.price)}</span>
-                              <span className="text-right text-xs font-roboto">{numberWithCommas(item.price * item.qty)}</span>
+                              <span className="text-left text-xs font-roboto">{item.qty} jasa x {item.price}</span>
+                              <span className="text-right text-xs font-roboto">{item.price * item.qty}</span>
                             </div>
                         </div>
                       ))}
@@ -67,7 +68,7 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
                     </div>
                     {/* <div className="flex w-full mt-0 justify-between">
                       <span className="text-xs font-roboto">DISCOUNT:</span>
-                      <span className="text-xs font-roboto">{discountRate}</span>
+                      <span className="text-xs font-roboto">{discount}</span>
                     </div> */}
                     <div className="flex w-full mt-0 justify-between">
                       <span className="text-xs font-roboto">TOTAL:</span>
@@ -85,8 +86,8 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
                       <span className="text-xs font-roboto">KEMBALI</span>
                       <span className="text-xs font-roboto">{kembali}</span>
                     </div>
-                    <div className="flex w-full mt-0 text-center">
-                        <h4 className="mt- text-xs font-roboto text-left">TERIMAKASIH</h4>
+                    <div className="w-full mt-1 text-center">
+                        <h4 className="mt-1 text-xs font-roboto text-center">TERIMAKASIH</h4>
                     </div>
                   </div>
                 </div>

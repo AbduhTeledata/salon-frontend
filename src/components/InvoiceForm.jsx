@@ -24,7 +24,7 @@ const time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()
 const InvoiceForm = (props) => {
   const { user } = useSelector((state) => state.auth);
   const [discount, setDiscount] = useState(0);
-  const [tax, setTax] = useState('');
+  const [tax, setTax] = useState(0);
   const [invoiceNumber, setInvoiceNumber] = useState("INV00000001");
   const [cashierName, setCashierName] = useState('');
   const [customerName, setCustomerName] = useState('');
@@ -32,12 +32,15 @@ const InvoiceForm = (props) => {
   const [kodemember, setKodeMember] = useState("KYOSHI");
   const [note, setNote] = useState("Keterangan");
   const [terapis, setTerapis] = useState("Terapis");
-  const [productId, setProductId] = useState();
+  const [productId, setProductId] = useState('');
+  const [productName, setProductName] = useState('');
+  // const [productQty, setProductQty] = useState(props.qty);
+  // const [productPrice, setProductPrice] = useState(props.price);
   const [iscard, setIsCard] = useState("M");
   const [modal, setModal] = useState(false);
   const [isMutating, setIsMutating] = useState(false);
   const [products, setProducts] = useState([]);
-  const [qty, setQty] = useState();
+  const [qty, setQty] = useState('');
   
   const [tunai, setTunai] = useState('');
   const [kembali, setKembali] = useState('');
@@ -49,6 +52,37 @@ const InvoiceForm = (props) => {
 
   const [items, setItems] = useState([]);
   
+  // const option = props.option
+  // const [totalVotes, setTotalVotes] = useState(0)
+  // let newVote = 0
+
+  // useEffect(() => {
+  //     if (option.length > 0) {
+  //         option.map(opt => {
+  //             newVote = opt.optionVotes + newVote
+  //             console.log(newVote)
+  //         })
+  //     }
+  //     console.log(newVote)
+  //     setTotalVotes(newVote)
+  // }, [totalVotes])
+  // console.log(totalVotes)
+  console.log(props.name)
+  // const newName = props.name
+  // const [totalName, setTotalName] = useState(0)
+  // let newProductName = 0
+
+  // useEffect(() => {
+  //     if (newName.length > 0) {
+  //         newName.map(opt => {
+  //             newProductName = opt.name + newProductName
+  //             console.log(newProductName)
+  //         })
+  //     }
+  //     console.log(newProductName)
+  //     setTotalName(newProductName)
+  // }, [totalName])
+  // console.log(totalName)
   
   function updateItem(id, newName, newQty, newPrice){
     const updateItem = items.map((item) => {
@@ -58,19 +92,6 @@ const InvoiceForm = (props) => {
         return item;
     });
     setItems(updateItem);
-};
-
-function newItem(name, qty, price){
-    const newItem = {
-        id: uuidv4(),
-        name: name,
-        qty: qty,
-        price: price,
-    }
-    setItems([...items, newItem])
-    setProductId(newItem.id)
-    // setQty(newItem.qty);
-    console.log("newItem QTY:" + newItem.qty);
 };
 
   const reviewInvoiceHandler = (event) => {
@@ -89,35 +110,49 @@ function newItem(name, qty, price){
     handleReactToPrint();
   }
 
-  const addNextInvoiceHandler = () => {
-    setInvoiceNumber((prevNumber) => invoiceToNumber(prevNumber));
-    setItems([
-      {
-        id: uid(6),
-        name: '',
-        qty: 1,
-        price: '1.00',
-      },
-    ]);
-  };
+  // const addNextInvoiceHandler = () => {
+  //   setInvoiceNumber((prevNumber) => invoiceToNumber(prevNumber));
+  //   setItems([
+  //     {
+  //       id: uid(6),
+  //       name: '',
+  //       qty: 1,
+  //       price: '1.00',
+  //     },
+  //   ]);
+  // };
+  function newItem(name, qty, price){
+    const newItem = {
+        id: uuidv4(),
+        name: name,
+        qty: qty,
+        price: price,
+    }
+    setItems([...items, newItem])
+    // setProductId(newItem.id)
+    setQty(newItem.qty);
+    // setProductId(newItem.id);
+    setProductName(newItem.name);
+    // setQty(newItem.qty)
+};
 
-  const addItemHandler = () => {
+  const addItemHandler = (productname, productqty, productprice) => {
     const id = uid(6);
-    // const newItem = {
-    //   id: id,
-    //   name: name,
-    //   qty: qty,
-    //   price: price,
-    // };
+    const newItem = {
+      id: id,
+      name: productname,
+      qty: productqty,
+      price: productprice,
+    };
 
-    // setItems([...items, newItem ]);
+    setItems([...items, newItem ]);
     setItems((prevItem) => [
       ...prevItem,
       {
-        id: id,
-        name: '',
-        qty: '1',
-        price: '1.00',
+        id: productid,
+      name: productname,
+      qty: productqty,
+      price: productprice,
       },
     ]);
   };
@@ -133,7 +168,7 @@ function newItem(name, qty, price){
       value: event.target.value,
     };
 
-    const newItems = items.map((items) => {
+  const newItems = items.map((items) => {
       for (const key in items) {
         if (key === editedItem.name && items.id === editedItem.id) {
           items[key] = editedItem.value;
@@ -143,8 +178,9 @@ function newItem(name, qty, price){
     });
 
     setItems(newItems);
-    // setQty(newItems.qty);
-    console.log("EditItem QTY:" + newItems.qty);
+    setQty(newItems.qty);
+    setProductName(newItems.name);
+    console.log("edit newitems:", newItems);
   };
 
   const saveOrder = async (e) => {
@@ -152,17 +188,17 @@ function newItem(name, qty, price){
     try {
       await axios.post(API_URL + 'orders', {
         inv_code: invoiceNumber,
+        productname: productName,
         qty: qty,
         sub_total: subtotal,
         total_disc: discount,
-        taxes: taxRate,
+        taxes: tax,
         total_price: total,
-        kodemember: customerName,
+        customer: customerName,
         iscard: iscard,
         note: note,
         terapis: terapis,
-        productId: productId,
-        branchId: branchId
+        branchId: user && user.branchId
       });
       navigate("/invoices");
       console.log("Data berhasil masuk ke database");
@@ -184,62 +220,33 @@ function newItem(name, qty, price){
   // const discountRate = (discount * subtotal) / 100;
   const total = subtotal - discount;
 
-  // useEffect(() => {
-  //   setSubTotal(newSubtotal);
-  //   setDiscount(discount);
-  //   const newTotal = newSubtotal - discount;
-  //   setTotal(newTotal);
-  //   setTunai(tunai);
-  //   const newkembali = tunai - newTotal;
-  //   setKembali(newkembali);
+const [values, set_values] = useState({
+    tunai:'',
+    kembali:'',
+    total:total,
+    discount: '',
+})
 
-  //   console.log(newTotal);
-  //   console.log(subtotal)
-  //   console.log(newkembali);
-  //   console.log(discount);
-  //   console.log(tunai)
-    
-  //   // const taxRate = (tax * subtotal) / 100;
-  //   // const discountRate = (discount * subtotal) / 100;
-   
-  
-  
-  // }, [total, subtotal, discount, kembali]);
+const values_handler = (e) => {
+    let name= e.target.name;
+    let value= e.target.value;
+    const newValues = {
+      ...values, [name]: value
+    }
+    set_values(newValues)
 
-  
-//   const onChangeTunai=(e)=>{
-//     let name=e.target.name;
-//     let value=e.target.value;
-//     const newValues = {
-//     ...values, [name]: value
-//   } 
-//   setValues(newValues)
-//   calcSum(newValues)
-//   // calcfirst(newValues)
-//   // calcSecond(newValues)
-// }
+    // Calling the method to sum the value
+    // calc_total(newValues) 
+    console.log(newValues)
+}
 
-// const calcSum = (newValues) => {
-//   const { tunai, subtotal, discount } = newValues;
-//   const total = subtotal - discount;
-//   const newSum = parseInt(tunai,10);
-//   setKembali(newSum);
-//   console.log("total:" + subtotal);
-// } 
-// - parseInt(total,10);
+const [newKembali,setNewKembali]=useState(0);
 
-  // const calcfirst = (newValues) => {
-  // const { sum, kembali} = newValues;
-  // const newFirst = parseInt(sum,10)-parseInt(kembali,10)
-  // setFirst(newFirst)
-  // } 
-  
-  // const calcSecond = (newValues) => {
-  // const { sum, tunai} = newValues;
-  // const newSecond = parseInt(sum,10)-parseInt(tunai,10)
-  // setSecond(newSecond)
-  // } 
-
+const calc_total = (newValues) => {
+    let {tunai, discount} = newValues;
+    newKembali = parseInt(tunai) - parseInt(discount);
+    setNewKembali(newKembali)
+}
  
   return (
     <div>
@@ -390,7 +397,7 @@ function newItem(name, qty, price){
               />
               
             ))}
-            <>{console.log("Items:" + items)}</>
+           {/* {console.log("Items:" + items.id)} */}
           </tbody>
         </table>
         {/* <button
@@ -444,7 +451,7 @@ function newItem(name, qty, price){
               <ComponentToPrint 
                 invoiceNumber={invoiceNumber} 
                 customerName={customerName}
-                discountRate={discount}
+                discount={discount}
                 items={items} 
                 total={total} 
                 note={note}
@@ -486,8 +493,8 @@ function newItem(name, qty, price){
                   name="tunai"
                   id="tunai"
                   placeholder="0"
-                  defaultValue={tunai}
-                  onChange={(e) => setTunai(e.target.value)}
+                  // value={tunai}
+                  onChange={values_handler}
                   disabled
                 />
                 <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
@@ -507,7 +514,7 @@ function newItem(name, qty, price){
                   id="kembali"
                   placeholder="0"
                   value={numberWithCommas(kembali)}
-                  onChange={(e) => setKembali(e.target.value)}
+                  onChange={values_handler}
                   disabled
                 />
                 <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
@@ -515,23 +522,43 @@ function newItem(name, qty, price){
                 </span>
               </div>
             </div>
+            {/* <div className="space-y-2">
+              <label className="text-sm font-bold md:text-base" htmlFor="total">
+                Total:
+              </label>
+              <div className="flex items-center">
+                <input
+                  className="w-full rounded-r-none bg-white shadow-sm"
+                  type="text"
+                  name="total"
+                  id="total"
+                  placeholder="0"
+                  // value={numberWithCommas(total)}
+                  onChange={values_handler}
+                  disabled
+                />
+                <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
+                  Rp.
+                </span>
+              </div>
+            </div> */}
           </div>
         </div>
       </div>
     </form>
-    {console.log({
-        invoiceNumber, 
-        qty: qty, 
-        subtotal, 
-        discount, 
-        tax, 
-        total,
-        kodemember: customerName,
-        iscard: iscard,
-        note: note,
-        terapis: terapis,
-        productId: productId,
-        branchId: branchId})}
+    {/* {console.log("saveOrder",{
+       inv_code: invoiceNumber,
+       productname: productName,
+       qty: qty,
+       sub_total: subtotal,
+       total_disc: discount,
+       taxes: tax,
+       total_price: total,
+       customer: customerName,
+       iscard: iscard,
+       note: note,
+       terapis: terapis,
+       branchId: user && user.branchId})} */}
     </div>
   );
 };

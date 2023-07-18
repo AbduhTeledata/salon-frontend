@@ -10,6 +10,7 @@ import { useReactToPrint } from 'react-to-print';
 import { ReportToPrint } from './ReportToPrint';
 import originalMoment from "moment";
 import { extendMoment } from "moment-range";
+// import ReactTable from "react-table";
 
 
 const moment = extendMoment(originalMoment);
@@ -45,7 +46,24 @@ const FormReport = () => {
     const onToggle = () => {
       setIsOpen(!isOpen );
     };
-    
+
+
+    const subtotal = orders.reduce((acc, cur) => {
+      acc += cur.sub_total;
+      return acc;
+    }, 0);
+
+    const discount = orders.reduce((acc, cur) => {
+      acc += cur.total_disc;
+      return acc;
+    }, 0);
+
+    const total = orders.reduce((acc, cur) => {
+      acc += cur.total_price;
+      return acc;
+    }, 0);
+
+
     
     const fetchOrder = async() => {
       const result = await axios.get(API_URL + 'orders');
@@ -72,7 +90,8 @@ const FormReport = () => {
     }
 
     useEffect(() => {
-      fetchOrder();    
+      fetchOrder();  
+      // getTotals(); 
     }, []);
 
     useEffect(() => {
@@ -112,7 +131,7 @@ const FormReport = () => {
            <h2 className="subtitle">Kyoshi Beauty</h2>
            {/* <h2 className="subtitle">Laporan <strong>{user && user.branchId}</strong></h2> */}
       {/* <div>{renderSelectionValue()}</div> */}
-        <div>
+        <div className="grid grid-cols-2 gap-2 pt-2 pb-8">
           <input className="block m-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
             type="button"
             value="Tanggal"
@@ -171,6 +190,10 @@ const FormReport = () => {
         <tbody>
           {orders.map((order, index) => {
             let date = new Date(order["createdAt"]);
+            // let subtotal = 0;
+            // order.forEach(item => {
+            //   order += item[key].sub_total;
+            // });
             return(
             <>
             <tr 
@@ -179,8 +202,8 @@ const FormReport = () => {
                 <td className="whitespace-nowrap px-4 py-2 font-medium">{index + 1}</td>
                 <td className="whitespace-nowrap px-4 py-2">{date.toLocaleDateString()}</td>
                 <td className="whitespace-nowrap px-4 py-2">{order["inv_code"]}</td>
-                <td className="whitespace-nowrap px-4 py-2">{order.kodemember}</td>
-                <td className="whitespace-nowrap px-4 py-2">{order.product.name}</td>
+                <td className="whitespace-nowrap px-4 py-2">{order.customer}</td>
+                <td className="whitespace-nowrap px-4 py-2">{order.productname}</td>
                 <td className="whitespace-nowrap px-4 py-2 text-right">{numberWithCommas(order.sub_total)}</td>
                 <td className="whitespace-nowrap px-4 py-2 text-right">{numberWithCommas(order.total_disc)}</td>
                 <td className="whitespace-nowrap px-4 py-2 text-right">{numberWithCommas(order.total_price)}</td>
@@ -190,12 +213,16 @@ const FormReport = () => {
             </>
             );
           })}
+          <tr className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
+            <td colSpan='2' className='px-6 py-4 text-xl'>Total</td>
+            <td className='px-6 py-4 text-xl'></td>
+            <td className='px-6 py-4 text-xl'></td>
+            <td colSpan='2' className='px-6 py-4 text-xl'>Sub Harga: {numberWithCommas(subtotal)}</td>
+            <td colSpan='2' className='px-6 py-4 text-xl'>Discount: {numberWithCommas(discount)}</td>
+            <td colSpan='2' className='px-6 py-4 text-xl'>Total: {numberWithCommas(total)}</td>
+          </tr>
         </tbody>
-        
       </table>
-      <div>
-        <h2 className='px-20 text-xl text-right'>Total: Rp.{numberWithCommas(totalPrice)}</h2>
-      </div>
       </div>
       </div>
       </div>

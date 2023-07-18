@@ -34,7 +34,7 @@ const AddCart = (props) => {
         console.log(products[index]);
         console.log(products[index].name);
         console.log(products[index].price);
-        // setId(products[index].id);
+        setId(products[index].id); //qty di form tdk aktif apabila dikirim productId
         setName(products[index].name);
         setPrice(products[index].price);
         setQty(1);
@@ -62,9 +62,9 @@ const AddCart = (props) => {
             <form onSubmit={(e) => {
                 e.preventDefault();
                 // setId('');
-                setName('');
-                setQty('');
-                setPrice('');
+                // setName('');
+                // setQty('');
+                // setPrice('');
                 props.newItem(name, qty, price);
             }}
                 id='addmodal' 
@@ -73,7 +73,7 @@ const AddCart = (props) => {
                       <table className=" relative w-full p-2 text-left text-sm">
                         <thead>
                           <tr>
-                            <th className="text-center">ID</th>
+                            {/* <th className="text-center">ID</th> */}
                             <th className="text-center">No.</th>
                             <th className="text-center">Jasa</th>
                             <th className="text-center">Harga</th>
@@ -84,7 +84,7 @@ const AddCart = (props) => {
                             {products.map((product, index) => (
                             <tr key={index} data-index={index} onClick={productsdetails}>
                                 <td>{index + 1}</td>
-                                <td>{product.id}</td>
+                                {/* <td>{product.id}</td> */}
                                 <td>{product.name}</td>
                                 <td>{numberWithCommas(product.price)}</td>
                                 <td>

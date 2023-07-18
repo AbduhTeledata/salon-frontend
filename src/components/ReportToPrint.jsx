@@ -1,12 +1,29 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { DateRangePicker } from 'react-date-range';
 import { numberWithCommas } from '../utils/utils';
 import 'react-date-range/dist/styles.css'; 
 import 'react-date-range/dist/theme/default.css'; 
 import logo from "../logo.png";
 
+
 export const ReportToPrint = React.forwardRef((props, ref) => {
     const {orders, totalPrice} = props;
+
+    const subtotal = orders.reduce((acc, cur) => {
+      acc += cur.sub_total;
+      return acc;
+    }, 0);
+
+    const discount = orders.reduce((acc, cur) => {
+      acc += cur.total_disc;
+      return acc;
+    }, 0);
+
+    const total = orders.reduce((acc, cur) => {
+      acc += cur.total_price;
+      return acc;
+    }, 0);
+
   return (
     <div ref={ref} className="p-2">
       <img
@@ -44,22 +61,36 @@ export const ReportToPrint = React.forwardRef((props, ref) => {
                       <td className="whitespace-nowrap border-r dark:border-neutral-500">{index + 1}</td>
                       <td className="whitespace-nowrap border-r dark:border-neutral-500">{date.toLocaleDateString()}</td>
                       <td className="whitespace-nowrap border-r dark:border-neutral-500">{order["inv_code"]}</td>
-                      <td className="whitespace-nowrap border-r dark:border-neutral-500">{order.kodemember}</td>
-                      <td className="whitespace-nowrap border-r dark:border-neutral-500">{order.product.name}</td>
-                      <td className="whitespace-nowrap border-r dark:border-neutral-500 text-right">{numberWithCommas(order.sub_total)}</td>
-                      <td className="whitespace-nowrap border-r dark:border-neutral-500 text-right">{numberWithCommas(order.total_disc)}</td>
-                      <td className="whitespace-nowrap border-r dark:border-neutral-500 text-right">{numberWithCommas(order.total_price)}</td>
+                      <td className="whitespace-nowrap border-r dark:border-neutral-500">{order.customer}</td>
+                      <td className="whitespace-nowrap border-r dark:border-neutral-500">{order.productname}</td>
+                      <td className="whitespace-nowrap border-r dark:border-neutral-500 text-right">{order.sub_total}</td>
+                      <td className="whitespace-nowrap border-r dark:border-neutral-500 text-right">{order.total_disc}</td>
+                      <td className="whitespace-nowrap border-r dark:border-neutral-500 text-right">{order.total_price}</td>
                       <td className="whitespace-nowrap border-r dark:border-neutral-500">{order.terapis}</td>
+                     
                     </tr>
+                    
                     );
                   })}
+                  <tr className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
+                    <td colSpan='2' className='px-6 py-4 text-sm'>Total</td>
+                    <td className='px-6 py-4 text-sm'></td>
+                    <td className='px-6 py-4 text-sm'></td>
+                    <td colSpan='2' className='px-6 py-4 text-sm'>Sub Harga: {numberWithCommas(subtotal)}</td>
+                    <td colSpan='2' className='px-6 py-4 text-sm'>Discount: {numberWithCommas(discount)}</td>
+                    <td colSpan='2' className='px-6 py-4 text-sm'>Total: {numberWithCommas(total)}</td>
+                  </tr>
                   </tbody>
                   
             </table>
-            <div className='col-span-4'>
+            {/* <div className='col-span-4'>
                     <h4 className='px-20 text-sm text-right'>Total: {numberWithCommas(totalPrice)}</h4>
-            </div>
-            
+                   
+            </div> */}
+            {/* <view>
+            {calculatedData.map(item=> <td key={item.id}> {item.total_price} </td>)}
+            {console.log(calculatedData)}
+            </view> */}
       </div>
   )
 });

@@ -13,7 +13,6 @@ const InvoiceField = ({ onClickItem, onEditItem, cellData }) => {
       id={cellData.id}
       value={cellData.value}
       onChange={onEditItem}
-      onClick={onClickItem}
       required
     />
   );

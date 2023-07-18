@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import InvoiceField from './InvoiceField';
 
-const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem, onClickItem }) => {
+const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
   
   const deleteItemHandler = () => {
     onDeleteItem(id);
@@ -13,7 +13,6 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem, onClickIt
        {/* <td>
         <InvoiceField
           onEditItem={(event) => onEdtiItem(event)}
-          onClick={(event) => onClickItem(event)}
           cellData={{
             placeholder: 'Item name',
             type: 'text',
@@ -26,7 +25,6 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem, onClickIt
       <td className="w-full">
         <InvoiceField
           onEditItem={(event) => onEdtiItem(event)}
-          onClick={(event) => onClickItem(event)}
           cellData={{
             placeholder: 'Item name',
             type: 'text',
@@ -114,7 +112,7 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem, onClickIt
           </svg>
         </button>
       </td>
-      <>{console.log({ qty: qty, })}</>
+      <>{console.log({ id: id, name: name, qty: qty, price: price})}</>
      </tr>
     
      
