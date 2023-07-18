@@ -112,17 +112,6 @@ const FormReport = () => {
       handleReactToPrint();
     }
 
-    // renderSelectionValue = () => {
-    //   return (
-    //     <div>
-    //       <div>Selection</div>
-    //       {this.state.value.start.format("YYYY-MM-DD")}
-    //       {" - "}
-    //       {this.state.value.end.format("YYYY-MM-DD")}
-    //     </div>
-    //   );
-    // };
-
   return (
     <div className='flex flex-col'>
       <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">

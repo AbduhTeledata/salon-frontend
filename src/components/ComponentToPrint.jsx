@@ -23,6 +23,11 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
         note,
         tunai,
         kembali} = props;
+
+    const itemqty = items.reduce((acc, cur) => {
+          acc += cur.qty;
+          return acc;
+    }, 0);
     
     return (
       // <div ref={ref} className="mt-0 mb-0">
@@ -64,7 +69,7 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
                   <div className="mt-0 flex flex-col items-end border-t border-black/10 py-2">
                     <div className="flex w-full mt-0 justify-between">
                       <span className="text-xs font-roboto">ITEM:</span>
-                      <span className="text-xs font-roboto">{items.qty}</span>
+                      <span className="text-xs font-roboto">{itemqty}</span>
                     </div>
                     {/* <div className="flex w-full mt-0 justify-between">
                       <span className="text-xs font-roboto">DISCOUNT:</span>
