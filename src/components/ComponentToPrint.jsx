@@ -1,7 +1,7 @@
 import React from "react";
 import { numberWithCommas } from "../utils/utils";
 import { useSelector } from "react-redux";
-import logo from "../logo.png";
+// import logo from "../logo.png";
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {

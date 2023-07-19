@@ -4,9 +4,11 @@ import { numberWithCommas } from '../utils/utils';
 import 'react-date-range/dist/styles.css'; 
 import 'react-date-range/dist/theme/default.css'; 
 import logo from "../logo.png";
+import { useSelector } from "react-redux";
 
 
 export const ReportToPrint = React.forwardRef((props, ref) => {
+  const { user } = useSelector((state) => state.auth);
     const {orders, totalPrice} = props;
 
     const subtotal = orders.reduce((acc, cur) => {
@@ -25,30 +27,32 @@ export const ReportToPrint = React.forwardRef((props, ref) => {
     }, 0);
 
   return (
-    <div ref={ref} className="p-2">
-      <img
-         src={logo}
-         width="50"
-         height="50"
-         className="d-inline-block align-top"
-         alt="Kyoshi salon logo"
-         /> {''}
-      <h3 className='inline subtitle'>Kyoshi Beauty</h3>
-      <h4 className="px-200 text-sm text-gray-900">
-         Jalan Paledang No.152F Cibereum-Bandung Telp/WA: 081222314411
-      </h4>
-          <table className='min-w-full text-left text-xs dark:border-neutral-500'>
-                  <thead className='border-b font-medium dark:border-neutral-500'>
+    <div ref={ref} className="mx-2 p-2">
+      <div className='w-full border-b mx-2 mb-1 p-2'>
+        <img
+          src={logo}
+          width="50"
+          height="50"
+          className="d-inline-block align-top mx-2"
+          alt="Kyoshi salon logo"
+          /> {''}
+        <h3 className='mt-8 inline subtitle'>Kyoshi Beauty</h3>
+        <h4 className="mx-10 mt-0 text-xs text-gray-900">
+          Jl. Paledang No.152F Cibeurem-Bandung {user && user.branch.address} Telp/WA: 0811222314411 {user && user.branch.phone}
+        </h4>
+      </div>
+          <table className='mx-2 border min-w-full text-left text-xs dark:border-neutral-500 p-2'>
+                  <thead className='border-b border-r font-medium dark:border-neutral-500'>
                     <tr>
-                      <th scope="col" className="border-r dark:border-neutral-500">No</th>
-                      <th scope="col" className="border-r dark:border-neutral-500">Tanggal</th>
-                      <th scope="col" className="border-r dark:border-neutral-500">No Invoice</th>
-                      <th scope="col" className="border-r dark:border-neutral-500">Customer</th>
+                      <th scope="col" className="border-r dark:border-neutral-500 text-center">No</th>
+                      <th scope="col" className="border-r dark:border-neutral-500 text-center">Tanggal</th>
+                      <th scope="col" className="border-r dark:border-neutral-500 text-center">No Invoice</th>
+                      <th scope="col" className="border-r dark:border-neutral-500 text-center">Customer</th>
                       <th scope="col" className="border-r dark:border-neutral-500 text-center">Nama Jasa</th>
-                      <th scope="col" className="border-r dark:border-neutral-500">Sub Harga</th>
-                      <th scope="col" className="border-r dark:border-neutral-500">Discount</th>
-                      <th scope="col" className="border-r dark:border-neutral-500">Harga</th>
-                      <th scope="col" className="border-r dark:border-neutral-500">Terapis</th>
+                      <th scope="col" className="border-r dark:border-neutral-500 text-center">Sub Harga</th>
+                      <th scope="col" className="border-r dark:border-neutral-500 text-center">Discount</th>
+                      <th scope="col" className="border-r dark:border-neutral-500 text-center">Harga</th>
+                      <th scope="col" className="border-r dark:border-neutral-500 text-center">Terapis</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -58,7 +62,7 @@ export const ReportToPrint = React.forwardRef((props, ref) => {
                     <tr 
                       className="border-b dark:border-neutral-500"
                       key={order.uuid}>
-                      <td className="whitespace-nowrap border-r dark:border-neutral-500">{index + 1}</td>
+                      <td className="whitespace-nowrap border-r dark:border-neutral-500 text-center">{index + 1}.</td>
                       <td className="whitespace-nowrap border-r dark:border-neutral-500">{date.toLocaleDateString()}</td>
                       <td className="whitespace-nowrap border-r dark:border-neutral-500">{order["inv_code"]}</td>
                       <td className="whitespace-nowrap border-r dark:border-neutral-500">{order.customer}</td>

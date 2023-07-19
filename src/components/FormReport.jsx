@@ -161,6 +161,7 @@ const FormReport = () => {
                 discount={order.total_disc}
                 total={order.total_price} 
                 terapis={order.terapis} */}
+      {/* <h4>Periode{handleSelect}</h4> */}
       <table className='min-w-full text-left text-sm font-light'>
         <thead className='border-b font-bold dark:border-neutral-500'>
           <tr>

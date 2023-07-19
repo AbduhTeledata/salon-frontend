@@ -43,7 +43,7 @@ const InvoiceForm = (props) => {
   const [qty, setQty] = useState('');
   
   const [tunai, setTunai] = useState('');
-  const [kembali, setKembali] = useState('');
+  // const [kembali, setKembali] = useState('');
   // const [total, setTotal] = useState('');
   // const [subtotal, setSubTotal] = useState('');
   // const [total,setTotal]=useState('');
@@ -52,37 +52,8 @@ const InvoiceForm = (props) => {
 
   const [items, setItems] = useState([]);
   
-  // const option = props.option
-  // const [totalVotes, setTotalVotes] = useState(0)
-  // let newVote = 0
-
-  // useEffect(() => {
-  //     if (option.length > 0) {
-  //         option.map(opt => {
-  //             newVote = opt.optionVotes + newVote
-  //             console.log(newVote)
-  //         })
-  //     }
-  //     console.log(newVote)
-  //     setTotalVotes(newVote)
-  // }, [totalVotes])
-  // console.log(totalVotes)
+  
   console.log(props.name)
-  // const newName = props.name
-  // const [totalName, setTotalName] = useState(0)
-  // let newProductName = 0
-
-  // useEffect(() => {
-  //     if (newName.length > 0) {
-  //         newName.map(opt => {
-  //             newProductName = opt.name + newProductName
-  //             console.log(newProductName)
-  //         })
-  //     }
-  //     console.log(newProductName)
-  //     setTotalName(newProductName)
-  // }, [totalName])
-  // console.log(totalName)
   
   function updateItem(id, newName, newQty, newPrice){
     const updateItem = items.map((item) => {
@@ -216,9 +187,15 @@ const InvoiceForm = (props) => {
     else return prev;
   }, 0);
 
+  const itemqty = items.reduce((acc, cur) => {
+    acc += cur.qty;
+    return acc;
+  }, 0);
+
   // const taxRate = (tax * subtotal) / 100;
   // const discountRate = (discount * subtotal) / 100;
   const total = subtotal - discount;
+  const kembali = tunai - total;
 
 const [values, set_values] = useState({
     tunai:'',
@@ -233,14 +210,15 @@ const values_handler = (e) => {
     const newValues = {
       ...values, [name]: value
     }
-    set_values(newValues)
+    set_values(newValues);
+    setTunai(newValues);
 
     // Calling the method to sum the value
     // calc_total(newValues) 
     console.log(newValues)
 }
 
-const [newKembali,setNewKembali]=useState(0);
+const [newKembali,setNewKembali] = useState(0);
 
 const calc_total = (newValues) => {
     let {tunai, discount} = newValues;
@@ -409,6 +387,10 @@ const calc_total = (newValues) => {
         </button> */}
         <AddCart newItem={newItem}/>
         <div className="flex flex-col items-end space-y-2 pt-6">
+          {/* <div className="flex w-full justify-between md:w-1/2">
+            <span className="font-bold">Item:</span>
+            <span>{itemqty}</span>
+          </div> */}
           <div className="flex w-full justify-between md:w-1/2">
             <span className="font-bold">Subtotal:</span>
             <span>{numberWithCommas(subtotal)}</span>
@@ -431,6 +413,12 @@ const calc_total = (newValues) => {
               {numberWithCommas(total) % 1 === 0 ? numberWithCommas(total) : numberWithCommas(total)}
             </span>
           </div>
+          {/* <div className="flex w-full justify-between md:w-1/2">
+            <span className="font-bold">Kembali:</span>
+            <span>
+              {numberWithCommas(kembali)}
+            </span>
+          </div> */}
         </div>
       </div>
       <div className="basis-1/4 bg-transparent">
@@ -493,16 +481,15 @@ const calc_total = (newValues) => {
                   name="tunai"
                   id="tunai"
                   placeholder="0"
-                  // value={tunai}
-                  onChange={values_handler}
-                  disabled
+                  value={tunai}
+                  onChange={(e) => setTunai(e.target.value)}
                 />
                 <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
                   Rp.
                 </span>
               </div>
             </div>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <label className="text-sm font-bold md:text-base" htmlFor="kembali">
                 Kembali:
               </label>
@@ -513,7 +500,8 @@ const calc_total = (newValues) => {
                   name="kembali"
                   id="kembali"
                   placeholder="0"
-                  value={numberWithCommas(kembali)}
+                  defaultValue="0"
+                  // value={numberWithCommas(kembali)}
                   onChange={values_handler}
                   disabled
                 />
@@ -521,7 +509,7 @@ const calc_total = (newValues) => {
                   Rp.
                 </span>
               </div>
-            </div>
+            </div> */}
             {/* <div className="space-y-2">
               <label className="text-sm font-bold md:text-base" htmlFor="total">
                 Total:
