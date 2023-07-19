@@ -87,10 +87,10 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
                       <span className="text-xs font-roboto">TUNAI</span>
                       <span className="text-xs font-roboto">{tunai}</span>
                     </div>
-                    <div className="flex w-full mt-0 justify-between">
+                    {/* <div className="flex w-full mt-0 justify-between">
                       <span className="text-xs font-roboto">KEMBALI</span>
                       <span className="text-xs font-roboto">{kembali}</span>
-                    </div>
+                    </div> */}
                     <div className="w-full mt-1 text-center">
                         <h4 className="mt-1 text-xs font-roboto text-center">TERIMAKASIH</h4>
                     </div>

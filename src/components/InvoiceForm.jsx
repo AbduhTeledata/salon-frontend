@@ -28,10 +28,10 @@ const InvoiceForm = (props) => {
   const [invoiceNumber, setInvoiceNumber] = useState("INV00000001");
   const [cashierName, setCashierName] = useState('');
   const [customerName, setCustomerName] = useState('');
-  const [branchId, setBranchId] = useState(1);
-  const [kodemember, setKodeMember] = useState("KYOSHI");
+  const [branchId, setBranchId] = useState('');
+  const [kodemember, setKodeMember] = useState('');
   const [note, setNote] = useState("Keterangan");
-  const [terapis, setTerapis] = useState("Terapis");
+  const [terapis, setTerapis] = useState('');
   const [productId, setProductId] = useState('');
   const [productName, setProductName] = useState('');
   // const [productQty, setProductQty] = useState(props.qty);
@@ -55,7 +55,7 @@ const InvoiceForm = (props) => {
   
   console.log(props.name)
   
-  function updateItem(id, newName, newQty, newPrice){
+function updateItem(id, newName, newQty, newPrice){
     const updateItem = items.map((item) => {
         if(id == item.id){
             return {...item, name: newName, newQty: newQty, newPrice: newPrice };
@@ -64,6 +64,7 @@ const InvoiceForm = (props) => {
     });
     setItems(updateItem);
 };
+
 
   const reviewInvoiceHandler = (event) => {
     event.preventDefault();
@@ -78,6 +79,9 @@ const InvoiceForm = (props) => {
 
   const handlePrint = () => {
     setInvoiceNumber((prevNumber) => invoiceToNumber(prevNumber));
+    setDiscount(0);
+    setQty('');
+    setItems([]);
     handleReactToPrint();
   }
 
@@ -161,10 +165,10 @@ const InvoiceForm = (props) => {
         inv_code: invoiceNumber,
         productname: productName,
         qty: qty,
-        sub_total: subtotal,
+        sub_total: newsubtotal,
         total_disc: discount,
         taxes: tax,
-        total_price: total,
+        total_price: newtotal,
         customer: customerName,
         iscard: iscard,
         note: note,
@@ -187,6 +191,34 @@ const InvoiceForm = (props) => {
     else return prev;
   }, 0);
 
+  const total = subtotal - discount;
+ 
+  const kembali = tunai - total;
+
+  const newsubtotal = items.reduce((prev, curr) => {
+    if (curr.name.trim().length > 0)
+      return prev = Number(curr.price * Math.floor(curr.qty));
+    else return prev;
+  }, 0);
+
+  const newtotal = newsubtotal - discount;
+
+  const subdiscount = items.reduce((prev, curr) => {
+    if (curr.name.trim().length > 0)
+      return prev + Number(curr.price * Math.floor(curr.qty));
+    else return prev;
+  }, 0);
+
+  const values_discount = (e) => {
+    let name= e.target.name;
+    let value= e.target.value;
+    const newValues = {
+      ...values, [name]: value
+    }
+    setDiscount(newValues);
+    console.log(newValues);
+  }
+
   const itemqty = items.reduce((acc, cur) => {
     acc += cur.qty;
     return acc;
@@ -194,8 +226,7 @@ const InvoiceForm = (props) => {
 
   // const taxRate = (tax * subtotal) / 100;
   // const discountRate = (discount * subtotal) / 100;
-  const total = subtotal - discount;
-  const kembali = tunai - total;
+  
 
 const [values, set_values] = useState({
     tunai:'',
@@ -203,6 +234,8 @@ const [values, set_values] = useState({
     total:total,
     discount: '',
 })
+
+
 
 const values_handler = (e) => {
     let name= e.target.name;
@@ -296,7 +329,7 @@ const calc_total = (newValues) => {
                   type="text"
                   name="customer"
                   id="customer"
-                  placeholder="Nama Customer"
+                  placeholder="Customer"
                   value={customerName}
                   onChange={(event) => setCustomerName(event.target.value)}
                 />
@@ -319,7 +352,7 @@ const calc_total = (newValues) => {
                   type="text"
                   name="terapis"
                   id="terapis"
-                  placeholder="Keterangan"
+                  placeholder="Terapis"
                   value={terapis}
                   onChange={(event) => setTerapis(event.target.value)}
                 />
@@ -534,19 +567,19 @@ const calc_total = (newValues) => {
         </div>
       </div>
     </form>
-    {/* {console.log("saveOrder",{
+    {console.log("saveOrder",{
        inv_code: invoiceNumber,
        productname: productName,
        qty: qty,
-       sub_total: subtotal,
+       sub_total: newsubtotal,
        total_disc: discount,
        taxes: tax,
-       total_price: total,
+       total_price: newtotal,
        customer: customerName,
        iscard: iscard,
        note: note,
        terapis: terapis,
-       branchId: user && user.branchId})} */}
+       branchId: user && user.branchId})}
     </div>
   );
 };

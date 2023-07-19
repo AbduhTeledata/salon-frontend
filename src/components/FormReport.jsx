@@ -170,6 +170,7 @@ const FormReport = () => {
             <th scope="col" className="px-4 py-2">No Invoice</th>
             <th scope="col" className="px-4 py-2">Customer</th>
             <th scope="col" className="px-4 py-2 text-center">Jasa</th>
+            <th scope="col" className="px-4 py-2">Qty</th>
             <th scope="col" className="px-4 py-2">Sub Harga</th>
             <th scope="col" className="px-4 py-3">Discount</th>
             <th scope="col" className="px-4 py-2">Harga</th>
@@ -193,8 +194,9 @@ const FormReport = () => {
                 <td className="whitespace-nowrap px-4 py-2">{date.toLocaleDateString()}</td>
                 <td className="whitespace-nowrap px-4 py-2">{order["inv_code"]}</td>
                 <td className="whitespace-nowrap px-4 py-2">{order.customer}</td>
-                <td className="whitespace-nowrap px-4 py-2">{order.productname}</td>
-                <td className="whitespace-nowrap px-4 py-2 text-right">{numberWithCommas(order.sub_total)}</td>
+                <td className="whitespace-nowrap w-full px-4 py-2">{order.productname}</td>
+                <td className="whitespace-nowrap px-4 py-2">{order.qty}</td>
+                <td className="whitespace-nowrap  px-4 py-2 text-right">{numberWithCommas(order.sub_total)}</td>
                 <td className="whitespace-nowrap px-4 py-2 text-right">{numberWithCommas(order.total_disc)}</td>
                 <td className="whitespace-nowrap px-4 py-2 text-right">{numberWithCommas(order.total_price)}</td>
                 <td className="whitespace-nowrap px-4 py-2 text-left">{order.terapis}</td>

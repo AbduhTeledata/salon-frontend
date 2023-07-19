@@ -6,6 +6,15 @@ import 'react-date-range/dist/theme/default.css';
 import logo from "../logo.png";
 import { useSelector } from "react-redux";
 
+const date = new Date();
+const today = date.toLocaleDateString('en-GB', {
+  month: 'numeric',
+  day: 'numeric',
+  year: 'numeric',
+});
+
+const time = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+
 
 export const ReportToPrint = React.forwardRef((props, ref) => {
   const { user } = useSelector((state) => state.auth);
