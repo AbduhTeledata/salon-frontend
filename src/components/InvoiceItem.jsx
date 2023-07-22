@@ -108,7 +108,7 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
           </svg>
         </button>
       </td>
-      <>{console.log("Item:",{ id: id, name: name, qty: qty, price: price})}</>
+      {/* <>{console.log("Item:",{ id: id, name: name, qty: qty, price: price})}</> */}
      </tr>
     
      

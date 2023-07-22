@@ -1,0 +1,95 @@
+/* @media print {
+    .logo {
+        font-size: 9pt;
+        text-align: center;
+    }
+    .address{
+        font-size: 9pt;
+        text-align: center;
+    }
+    .price{
+        font-size: 9pt;
+        float: right;
+    }
+} */
+
+.logo {
+    font-size: 9pt;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-weight: normal;
+    text-align: center;
+    /* position: absolute; */
+    /* left: 0; 
+    right: 0 */
+}
+.address {
+    font-size: 9px;
+    text-align: center;
+    font-weight: normal;
+    margin-top:1px;
+    margin-bottom: 1px;
+}
+.kanan {
+    text-align: right;
+    margin-top: 0px;
+}
+.kanan1 {
+    text-align: right;
+    margin-top: 0px;
+}
+.kiri1 {
+    text-align: left;
+    margin-top: 0px;
+    margin-left: 8px;
+    /* width: auto; */
+}
+.kiri { 
+    text-align: left;
+}
+.kiriitem { 
+    text-align: left;
+    /* width: auto; */
+}
+.parent {
+    height: 300px;
+    display: flex;
+    /* justify-content: center; */
+    border: 1px solid red;
+    /* justify-items: end; */
+  }
+  .childkiri {
+    /* margin: 0px; */
+    border: 1px solid green;
+    text-align: left;
+  }
+  .childkanan {
+    text-align: right;
+    border: 1px solid green;
+    justify-items: end;
+  }
+
+
+/* .columns {
+    Width: 100%;
+    }
+    .column {
+      width:100%;
+    }
+@media (min-width: 48em) {
+      .column {
+        width: 50%;
+        float:left;
+      }
+      .columns {
+        content: "";
+        display: table;
+        clear: both;
+      }
+} */
+/* .h2 {
+    font-weight: normal; 
+    text-align: center; 
+    margin-top: 0px; 
+    margin-bottom:0px;
+} */

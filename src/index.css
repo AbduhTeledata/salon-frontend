@@ -62,7 +62,8 @@
     @apply font-Opensans;
   }
 }
-@media print{
+
+/* @media print{
   body {
     visibility: hidden;
   }
@@ -72,7 +73,11 @@
     left: 0;
     top: 0;
   }
+  .logo {
+    font-size: 9pt;
+    text-align: center;
 }
+} */
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

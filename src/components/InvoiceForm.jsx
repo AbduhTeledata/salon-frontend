@@ -46,56 +46,27 @@ const InvoiceForm = (props) => {
   const [qty, setQty] = useState('');
   
   const [tunai, setTunai] = useState('');
+  const [msg, setMsg] = useState("");
+  const [items, setItems] = useState([]);
+  const [newdiscount, setNewDiscount] = useState(0);
+
   // const [kembali, setKembali] = useState('');
   // const [total, setTotal] = useState('');
   // const [subtotal, setSubTotal] = useState('');
   // const [total,setTotal]=useState('');
-
-  const [msg, setMsg] = useState("");
-
-  const [items, setItems] = useState([]);
   
-  
-  // console.log(props.name)
-  
-// function updateItem(id, newName, newQty, newPrice){
-//     const updateItem = items.map((item) => {
-//         if(id == item.id){
-//             return {...item, name: newName, newQty: newQty, newPrice: newPrice };
-//         }
-//         return item;
-//     });
-//     setItems(updateItem);
-// };
-  // const reviewInvoiceHandler = (event) => {
-  //   event.preventDefault();
-  //   setIsOpen(true);
-  // };
-  
-  function printTest() {
-    printJS({
-      printable: "invprint",
-      type: "html",
-		  style: [
-        'h2 {font-size: 9px; font-weight: normal; text-align: center; margin-top: 0px; margin-bottom:0px;} body {margin: 0;}'
-      ]
-      // targetStyles: ["*"]
-    });
-  }
-  const componentRef = useRef(null);
-  const handleReactToPrint = useReactToPrint({
-    pageStyle: "@page { size: 2.5in 4in }",
-    content: () => componentRef.current,
-    copyStyles: "false",
+  useEffect(() => {
+    console.log('newItems', items);
+    console.log('discount', discount);
+    console.log('items length', items.length);
+    console.log('newdiscount', newdiscount);
+    if (discount > 0  && items.length > 0) {
+      let  newdiscount = 0;
+      setNewDiscount( newdiscount = discount/items.length);
+    };
+    // setDiscount(discount);
   });
-  const handlePrint = () => {
-    setInvoiceNumber((prevNumber) => invoiceToNumber(prevNumber));
-    setDiscount(0);
-    setQty('');
-    setItems([]);
-    handleReactToPrint();
-    // openWindow(() => handleReactToPrint());
-  }
+
   function newItem(name, qty, price){
     const newItem = {
         id: uuidv4(),
@@ -109,60 +80,76 @@ const InvoiceForm = (props) => {
     // setProductId(newItem.id);
     setProductName(newItem.name);
     // setQty(newItem.qty)
-};
-
-const edtiItemHandler = (event) => {
-  const editedItem = {
-    id: event.target.id,
-    name: event.target.name,
-    value: event.target.value,
+    console.log("New Item", newItem) //1. ada
   };
 
-const newItems = items.map((items) => {
-    for (const key in items) {
-      if (key === editedItem.name && items.id === editedItem.id) {
-        items[key] = editedItem.value;
-      }
-    }
-    return items;
-  });
-
-const newQty = items.map((item) => {
-  for (const key in item) {
-    if (key === editedItem.name && editedItem.id === item.id) {
-       item[key] = editedItem.value;
-    }
-  }
-  // return item.qty;
-});
-  setQty(newQty);
-  setItems(newItems);
-  // setQty(newItems.qty);
-  // setProductName(newItems.name);
-  console.log("edit newitems:", newItems);
-};
-
-  const addItemHandler = (productname, productqty, productprice) => {
-    const id = uid(6);
-    const newItem = {
-      id: id,
-      name: productname,
-      qty: productqty,
-      price: productprice,
+  const edtiItemHandler = (event) => {
+    const editedItem = {
+      id: event.target.id,
+      name: event.target.name,
+      value: event.target.value,
     };
-
-    setItems([...items, newItem ]);
-    setItems((prevItem) => [
-      ...prevItem,
-      {
-        id: uuidv4(),
-        name: productname,
-        qty: productqty,
-        price: productprice,
-      },
-    ]);
+  
+    const newItems = items.map((items) => {
+      for (const key in items) {
+        if (key === editedItem.name && items.id === editedItem.id) {
+          items[key] = editedItem.value;
+        }
+      }
+      return items;
+    });
+  
+    const newQty = items.map((item) => {
+      for (const key in item) {
+        if (key === editedItem.name && editedItem.id === item.id) {
+          item[key] = editedItem.value;
+        }
+      }
+    // return item.qty;
+    });
+    setQty(newQty);
+    setItems(newItems);
+    // setQty(newItems.qty);
+    // setProductName(newItems.name);
+    console.log("edit newitems:", newItems);
   };
 
+  function printTest() {
+    printJS({
+      printable: 'invprint',
+      type: 'html',
+      // maxWidth:58,
+      css: './src/PrintStruk.css'
+		  // style: [
+      //   '@media print {size: 58mm} h2 {font-weight: normal; text-align: center; margin-top: 0px; margin-bottom:0px;} body {margin: 0;}',
+      //   '@media print'
+      // ],
+    //   targetStyles: [
+    //     'color',
+    //     'font-size',
+    //     'font-weight',
+    //     'margin-top',
+    //     'margin-bottom',
+    //     'text-align'
+    // ]
+    });
+  }
+  const componentRef = useRef(null);
+  const handleReactToPrint = useReactToPrint({
+    pageStyle: "@page { size: 2.5in 4in }",
+    content: () => componentRef.current,
+    copyStyles: "false",
+  });
+  
+  const handlePrint = () => {
+    setInvoiceNumber((prevNumber) => invoiceToNumber(prevNumber));
+    setDiscount(0);
+    setQty('');
+    setItems([]);
+    handleReactToPrint();
+    // openWindow(() => handleReactToPrint());
+  }
+ 
   const deleteItemHandler = (id) => {
     setItems((prevItem) => prevItem.filter((item) => item.id !== id));
   };
@@ -501,7 +488,7 @@ const calc_total = (newValues) => {
                   id="discount"
                   placeholder="0"
                   value={discount}
-                  onChange={(event) => setDiscount(event.target.value)}
+                  onChange={(event) => {setDiscount(event.target.value)}}
                 />
                 <span className="rounded-r-md bg-gray-200 py-2 px-4 text-gray-500 shadow-sm">
                   Rp.
@@ -572,7 +559,7 @@ const calc_total = (newValues) => {
         </div>
       </div>
     </form>
-    {console.log("saveOrder",{
+    {/* {console.log("saveOrder",{
        inv_code: invoiceNumber,
        productname: productName,
        qty: qty,
@@ -584,7 +571,7 @@ const calc_total = (newValues) => {
        iscard: iscard,
        note: note,
        terapis: terapis,
-       branchId: user && user.branchId})}
+       branchId: user && user.branchId})} */}
     </div>
   );
 };
