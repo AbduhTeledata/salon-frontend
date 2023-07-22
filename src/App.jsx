@@ -16,6 +16,7 @@ import Reports from './pages/Reports';
 import Invoices from './pages/Invoices';
 import Employees from './pages/Employees';
 import Transaksi from './pages/Transaksi';
+import Example from './components/InvoiceToPrint';
 // import './index.css'
 // import './App.css'
 
@@ -39,7 +40,7 @@ function App() {
               <Route path='/reports' element={<Reports />}/>
               <Route path='/invoices' element={<Invoices />}/>
               <Route path='/employees' element={<Employees />}/>
-              <Route path='/transaksi' element={<Transaksi />}/>
+              <Route path='/transaksi' element={<Example />}/>
             </Routes>
           </main>
         </BrowserRouter>

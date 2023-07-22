@@ -4,6 +4,7 @@ import TransaksiJasa from '../components/TransaksiJasa'
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getMe } from "../features/authSlice";
+import Example from '../components/InvoiceToPrint';
 
 const Transaksi = () => {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const Transaksi = () => {
   }, [isError, navigate]);
   return (
     <Layout>
-        <TransaksiJasa />
+        <Example />
     </Layout>
   )
 }

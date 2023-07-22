@@ -10,18 +10,6 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
   
   return (
     <tr>
-       {/* <td>
-        <InvoiceField
-          onEditItem={(event) => onEdtiItem(event)}
-          cellData={{
-            placeholder: 'Item name',
-            type: 'text',
-            name: 'name',
-            id: id,
-            value: id,
-          }}
-        />
-      </td> */}
       <td className="w-full">
         <InvoiceField
           onEditItem={(event) => onEdtiItem(event)}
@@ -81,22 +69,30 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
           cellData={{
             className: 'text-right',
             type: 'number',
-            min: '0.01',
-            step: '0.01',
             name: 'price',
             id: id,
             value: price,
           }}
         />
       </td>
+      {/* <td>
+        <InvoiceField
+          onEditItem={(event) => onEdtiItem(event)}
+          cellData={{
+            placeholder: 'note',
+            type: 'text',
+            name: 'note',
+            id: id,
+            value: note,
+          }}
+        />
+      </td> */}
       <td className="flex items-center justify-center">
         <button
           className="rounded-md bg-red-500 p-2 text-white shadow-sm transition-colors duration-200 hover:bg-red-600"
           onClick={deleteItemHandler}
         >
-         
           <svg
-          
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"
             fill="none"
@@ -112,7 +108,7 @@ const InvoiceItem = ({ id, name, qty, price, onDeleteItem, onEdtiItem }) => {
           </svg>
         </button>
       </td>
-      <>{console.log({ id: id, name: name, qty: qty, price: price})}</>
+      <>{console.log("Item:",{ id: id, name: name, qty: qty, price: price})}</>
      </tr>
     
      

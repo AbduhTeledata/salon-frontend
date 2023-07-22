@@ -11,6 +11,9 @@ import axios from 'axios';
 import { API_URL } from '../utils/constants';
 import { numberWithCommas } from '../utils/utils';
 import InvoiceItem from '../components/InvoiceItem'
+import printJS from "print-js";
+import PropTypes from "prop-types";
+import InvoiceToModal from './InvoiceToModal';
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {
@@ -30,7 +33,7 @@ const InvoiceForm = (props) => {
   const [customerName, setCustomerName] = useState('');
   const [branchId, setBranchId] = useState('');
   const [kodemember, setKodeMember] = useState('');
-  const [note, setNote] = useState("Keterangan");
+  const [note, setNote] = useState('');
   const [terapis, setTerapis] = useState('');
   const [productId, setProductId] = useState('');
   const [productName, setProductName] = useState('');
@@ -53,49 +56,46 @@ const InvoiceForm = (props) => {
   const [items, setItems] = useState([]);
   
   
-  console.log(props.name)
+  // console.log(props.name)
   
-function updateItem(id, newName, newQty, newPrice){
-    const updateItem = items.map((item) => {
-        if(id == item.id){
-            return {...item, name: newName, newQty: newQty, newPrice: newPrice };
-        }
-        return item;
+// function updateItem(id, newName, newQty, newPrice){
+//     const updateItem = items.map((item) => {
+//         if(id == item.id){
+//             return {...item, name: newName, newQty: newQty, newPrice: newPrice };
+//         }
+//         return item;
+//     });
+//     setItems(updateItem);
+// };
+  // const reviewInvoiceHandler = (event) => {
+  //   event.preventDefault();
+  //   setIsOpen(true);
+  // };
+  
+  function printTest() {
+    printJS({
+      printable: "invprint",
+      type: "html",
+		  style: [
+        'h2 {font-size: 9px; font-weight: normal; text-align: center; margin-top: 0px; margin-bottom:0px;} body {margin: 0;}'
+      ]
+      // targetStyles: ["*"]
     });
-    setItems(updateItem);
-};
-
-
-  const reviewInvoiceHandler = (event) => {
-    event.preventDefault();
-    setIsOpen(true);
-  };
-
-  const componentRef = useRef();
-
+  }
+  const componentRef = useRef(null);
   const handleReactToPrint = useReactToPrint({
+    pageStyle: "@page { size: 2.5in 4in }",
     content: () => componentRef.current,
+    copyStyles: "false",
   });
-
   const handlePrint = () => {
     setInvoiceNumber((prevNumber) => invoiceToNumber(prevNumber));
     setDiscount(0);
     setQty('');
     setItems([]);
     handleReactToPrint();
+    // openWindow(() => handleReactToPrint());
   }
-
-  // const addNextInvoiceHandler = () => {
-  //   setInvoiceNumber((prevNumber) => invoiceToNumber(prevNumber));
-  //   setItems([
-  //     {
-  //       id: uid(6),
-  //       name: '',
-  //       qty: 1,
-  //       price: '1.00',
-  //     },
-  //   ]);
-  // };
   function newItem(name, qty, price){
     const newItem = {
         id: uuidv4(),
@@ -111,6 +111,37 @@ function updateItem(id, newName, newQty, newPrice){
     // setQty(newItem.qty)
 };
 
+const edtiItemHandler = (event) => {
+  const editedItem = {
+    id: event.target.id,
+    name: event.target.name,
+    value: event.target.value,
+  };
+
+const newItems = items.map((items) => {
+    for (const key in items) {
+      if (key === editedItem.name && items.id === editedItem.id) {
+        items[key] = editedItem.value;
+      }
+    }
+    return items;
+  });
+
+const newQty = items.map((item) => {
+  for (const key in item) {
+    if (key === editedItem.name && editedItem.id === item.id) {
+       item[key] = editedItem.value;
+    }
+  }
+  // return item.qty;
+});
+  setQty(newQty);
+  setItems(newItems);
+  // setQty(newItems.qty);
+  // setProductName(newItems.name);
+  console.log("edit newitems:", newItems);
+};
+
   const addItemHandler = (productname, productqty, productprice) => {
     const id = uid(6);
     const newItem = {
@@ -124,38 +155,16 @@ function updateItem(id, newName, newQty, newPrice){
     setItems((prevItem) => [
       ...prevItem,
       {
-        id: productid,
-      name: productname,
-      qty: productqty,
-      price: productprice,
+        id: uuidv4(),
+        name: productname,
+        qty: productqty,
+        price: productprice,
       },
     ]);
   };
 
   const deleteItemHandler = (id) => {
     setItems((prevItem) => prevItem.filter((item) => item.id !== id));
-  };
-
-  const edtiItemHandler = (event) => {
-    const editedItem = {
-      id: event.target.id,
-      name: event.target.name,
-      value: event.target.value,
-    };
-
-  const newItems = items.map((items) => {
-      for (const key in items) {
-        if (key === editedItem.name && items.id === editedItem.id) {
-          items[key] = editedItem.value;
-        }
-      }
-      return items;
-    });
-
-    setItems(newItems);
-    setQty(newItems.qty);
-    setProductName(newItems.name);
-    console.log("edit newitems:", newItems);
   };
 
   const saveOrder = async (e) => {
@@ -218,25 +227,18 @@ function updateItem(id, newName, newQty, newPrice){
     setDiscount(newValues);
     console.log(newValues);
   }
-
   const itemqty = items.reduce((acc, cur) => {
     acc += cur.qty;
     return acc;
   }, 0);
-
   // const taxRate = (tax * subtotal) / 100;
   // const discountRate = (discount * subtotal) / 100;
-  
-
 const [values, set_values] = useState({
     tunai:'',
     kembali:'',
     total:total,
     discount: '',
 })
-
-
-
 const values_handler = (e) => {
     let name= e.target.name;
     let value= e.target.value;
@@ -268,15 +270,14 @@ const calc_total = (newValues) => {
       <div className="my-2 flex-1 space-y-2  rounded-md bg-white p-4 shadow-sm sm:space-y-4 md:p-6">
         <h1 className="text-center text-lg font-bold">KYOSHI BEAUTY - INVOICE</h1>
         <div className="flex flex-col justify-between space-y-2 border-b border-gray-900/10 pb-4 md:flex-row md:items-center md:space-y-0">
-        
           <div className="flex space-x-2">
             <span className="font-bold">Tanggal: </span>
             <span>{today}</span>
             {/* <span className="font-bold">Jam: </span>
             <span>{time}</span> */}
           </div>
-          <div className="flex items-center space-x-2">
-            <label className="font-bold" htmlFor="invoiceNumber">
+          <div  className="flex items-center space-x-2">
+            <label  className="font-bold" htmlFor="invoiceNumber">
               Nomor Invoice:
             </label>
             <input
@@ -364,7 +365,7 @@ const calc_total = (newValues) => {
           <div className="space-y-2">
               <label
                 className="text-sm font-bold md:text-base"
-                htmlFor="discount"
+                htmlFor="not"
               >
                 Keterangan:
               </label>
@@ -383,7 +384,7 @@ const calc_total = (newValues) => {
                   Note.
                 </span>
               </div>
-          </div>
+           </div>
         </div>
         <table className="w-full mt-0 p-2 text-left">
           <thead>
@@ -392,6 +393,7 @@ const calc_total = (newValues) => {
               <th>JASA</th>
               <th>QTY</th>
               <th className="text-center">HARGA</th>
+              {/* <th className="text-center">NOTE</th> */}
               <th className="text-center">ACTION</th>
             </tr>
           </thead>
@@ -403,6 +405,7 @@ const calc_total = (newValues) => {
                 name={item.name}
                 qty={item.qty}
                 price={item.price}
+                note={item.note}
                 onDeleteItem={deleteItemHandler}
                 onEdtiItem={edtiItemHandler}
               />
@@ -463,11 +466,13 @@ const calc_total = (newValues) => {
             Simpan
           </button>
           <button
-              onClick={handlePrint}
+              onClick={printTest}
               className="w-full block m-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
                >
             Cetak 
           </button>
+          {/* <InvoiceToModal /> */}
+          {/* onClick={printTest} */}
           <div style={{display: "none"}}>
               <ComponentToPrint 
                 invoiceNumber={invoiceNumber} 

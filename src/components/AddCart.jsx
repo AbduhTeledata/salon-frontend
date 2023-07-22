@@ -8,9 +8,10 @@ import CartItem from './CartItem';
 import { numberWithCommas } from '../utils/utils';
 
 const AddCart = (props) => {
-    const [id, setId] = useState('')
+    // const [id, setId] = useState('')
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
+    // const [note, setNote] = useState('note');
     const [qty, setQty] = useState('');
     const [products, setProducts] = useState([]);
     const [isMutating, setIsMutating] = useState(false);
@@ -30,13 +31,14 @@ const AddCart = (props) => {
 
     const productsdetails = (e) =>{
         let index = +e.currentTarget.getAttribute('data-index')
-        console.log(products[index].id);
-        console.log(products[index]);
-        console.log(products[index].name);
-        console.log(products[index].price);
-        setId(products[index].id); //qty di form tdk aktif apabila dikirim productId
+        // console.log(products[index].id);
+        // console.log(products[index]);
+        // console.log(products[index].name);
+        // console.log(products[index].price);
+        // setId(products[index].id); //qty di form tdk aktif apabila dikirim productId
         setName(products[index].name);
         setPrice(products[index].price);
+        // setNote('note');
         setQty(1);
     };
 
@@ -50,13 +52,14 @@ const AddCart = (props) => {
       </button>
 
       <Modal
+        size="lg"
         show={show}
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Tambah Item</Modal.Title>
+          <Modal.Title>Tambah Item Jasa</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <form onSubmit={(e) => {
@@ -70,13 +73,14 @@ const AddCart = (props) => {
                 id='addmodal' 
                 className="w-full max-w-sm">
                 <div className="overflow-y-auto h-[300px] relative p-2 flex-auto">
-                      <table className=" relative w-full p-2 text-left text-sm">
+                      <table className="relative w-[300px] p-2 text-left text-sm">
                         <thead>
                           <tr>
                             {/* <th className="text-center">ID</th> */}
                             <th className="text-center">No.</th>
                             <th className="text-center">Jasa</th>
                             <th className="text-center">Harga</th>
+                            {/* <th className="text-center">Note</th> */}
                             <th className="text-center">Action</th>
                           </tr>
                         </thead>
@@ -87,6 +91,14 @@ const AddCart = (props) => {
                                 {/* <td>{product.id}</td> */}
                                 <td>{product.name}</td>
                                 <td>{numberWithCommas(product.price)}</td>
+                                {/* <td>
+                                  <input
+                                  className='text-center'
+                                  value={note}
+                                  onChange={() => setNote(e.target.value)}
+                                  disabled
+                                  />   
+                                </td> */}
                                 <td>
                                   <div className="modal-action">
                                     {!isMutating ? (
@@ -105,6 +117,7 @@ const AddCart = (props) => {
                                   </div>
                                 </td>
                             </tr>
+                            
                         ))}
                         </tbody>
                     </table>

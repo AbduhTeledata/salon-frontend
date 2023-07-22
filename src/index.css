@@ -1,10 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @font-face {
-  font-family: "Merchant-Copy-Doublesize";
-  src: url("../public/fonts/Merchant-Copy-Doublesize.ttf");
+  font-family: "Opensans";
+  src: url("../fonts/OpenSans-Regular.ttf");
 }
+
+@font-face {
+  font-family: "Lato";
+  src: url("../fonts/Lato-Regular.ttf");
+}
+
+ @font-face {
+  font-family: "Roboto";
+  src: url("../fonts/Roboto-Bold.ttf");
+}
+
+@font-face {
+  font-family: "merchant";
+  src: url("../fonts/merchant-copy-wide.ttf");
+  font-weight: 400;
+} 
 
 
 @layer base {
@@ -43,6 +60,17 @@
 
   body {
     @apply font-Opensans;
+  }
+}
+@media print{
+  body {
+    visibility: hidden;
+  }
+  #section-to-print {
+    visibility: visible;
+    position: absolute;
+    left: 0;
+    top: 0;
   }
 }
 /* :root {
