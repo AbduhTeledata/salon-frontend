@@ -67,6 +67,33 @@ const InvoiceForm = (props) => {
     // setDiscount(discount);
   });
 
+  const saveOrder = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post(API_URL + 'orders', {
+        inv_code: invoiceNumber,
+        productname: productName,
+        qty: qty,
+        sub_total: newsubtotal,
+        total_disc: newdiscount,
+        taxes: tax,
+        total_price: newtotal,
+        customer: customerName,
+        iscard: iscard,
+        note: note,
+        terapis: terapis,
+        branchId: user && user.branchId
+      });
+      navigate("/invoices");
+      console.log("Data berhasil masuk ke database");
+    } catch (error) {
+      if (error.response) {
+        setMsg(error.response.data.msg);
+      }
+    }
+    
+  };
+
   function newItem(name, qty, price){
     const newItem = {
         id: uuidv4(),
@@ -133,6 +160,9 @@ const InvoiceForm = (props) => {
     //     'text-align'
     // ]
     });
+    setDiscount(0);
+    setQty('');
+    setItems([]);
   }
   const componentRef = useRef(null);
   const handleReactToPrint = useReactToPrint({
@@ -154,32 +184,7 @@ const InvoiceForm = (props) => {
     setItems((prevItem) => prevItem.filter((item) => item.id !== id));
   };
 
-  const saveOrder = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(API_URL + 'orders', {
-        inv_code: invoiceNumber,
-        productname: productName,
-        qty: qty,
-        sub_total: newsubtotal,
-        total_disc: discount,
-        taxes: tax,
-        total_price: newtotal,
-        customer: customerName,
-        iscard: iscard,
-        note: note,
-        terapis: terapis,
-        branchId: user && user.branchId
-      });
-      navigate("/invoices");
-      console.log("Data berhasil masuk ke database");
-    } catch (error) {
-      if (error.response) {
-        setMsg(error.response.data.msg);
-      }
-    }
-    
-  };
+ 
 
   const subtotal = items.reduce((prev, curr) => {
     if (curr.name.trim().length > 0)
@@ -559,7 +564,7 @@ const calc_total = (newValues) => {
         </div>
       </div>
     </form>
-    {/* {console.log("saveOrder",{
+    {console.log("saveOrder",{
        inv_code: invoiceNumber,
        productname: productName,
        qty: qty,
@@ -571,7 +576,7 @@ const calc_total = (newValues) => {
        iscard: iscard,
        note: note,
        terapis: terapis,
-       branchId: user && user.branchId})} */}
+       branchId: user && user.branchId})}
     </div>
   );
 };

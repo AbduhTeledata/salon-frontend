@@ -52,7 +52,7 @@ const AddCart = (props) => {
       </button>
 
       <Modal
-        size="lg"
+        // size="lg"
         show={show}
         onHide={handleClose}
         backdrop="static"
@@ -73,7 +73,7 @@ const AddCart = (props) => {
                 id='addmodal' 
                 className="w-full max-w-sm">
                 <div className="overflow-y-auto h-[300px] relative p-2 flex-auto">
-                      <table className="relative w-[300px] p-2 text-left text-sm">
+                      <table className="relative flex-auto p-2 text-left text-sm">
                         <thead>
                           <tr>
                             {/* <th className="text-center">ID</th> */}
