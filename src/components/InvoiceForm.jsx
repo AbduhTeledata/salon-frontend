@@ -75,7 +75,7 @@ const InvoiceForm = (props) => {
         productname: productName,
         qty: qty,
         sub_total: newsubtotal,
-        total_disc: newdiscount,
+        total_disc: discount,
         taxes: tax,
         total_price: newtotal,
         customer: customerName,
@@ -145,20 +145,7 @@ const InvoiceForm = (props) => {
     printJS({
       printable: 'invprint',
       type: 'html',
-      // maxWidth:58,
       css: './src/PrintStruk.css'
-		  // style: [
-      //   '@media print {size: 58mm} h2 {font-weight: normal; text-align: center; margin-top: 0px; margin-bottom:0px;} body {margin: 0;}',
-      //   '@media print'
-      // ],
-    //   targetStyles: [
-    //     'color',
-    //     'font-size',
-    //     'font-weight',
-    //     'margin-top',
-    //     'margin-bottom',
-    //     'text-align'
-    // ]
     });
     setDiscount(0);
     setQty('');
