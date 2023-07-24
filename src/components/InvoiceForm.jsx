@@ -171,7 +171,6 @@ const InvoiceForm = (props) => {
     setItems((prevItem) => prevItem.filter((item) => item.id !== id));
   };
 
- 
 
   const subtotal = items.reduce((prev, curr) => {
     if (curr.name.trim().length > 0)
@@ -234,11 +233,11 @@ const values_handler = (e) => {
 
 const [newKembali,setNewKembali] = useState(0);
 
-const calc_total = (newValues) => {
-    let {tunai, discount} = newValues;
-    newKembali = parseInt(tunai) - parseInt(discount);
-    setNewKembali(newKembali)
-}
+// const calc_total = (newValues) => {
+//     let {tunai, discount} = newValues;
+//     newKembali = parseInt(tunai) - parseInt(discount);
+//     setNewKembali(newKembali)
+// }
  
   return (
     <div>
