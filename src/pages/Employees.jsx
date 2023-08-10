@@ -57,10 +57,12 @@ const Employees = () => {
         setEmployees(updateEmployees);
     };
 
-    function newEmployee(name, role, img){
+    function newEmployee(name, address, phone, role, img){
         const newEmployee = {
             id: uuidv4(),
             name: name,
+            address: address,
+            phone: phone,
             role: role,
             img: img,
         }

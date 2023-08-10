@@ -1,8 +1,8 @@
 {
   "name": "salon-frontend",
   "private": true,
+  "homepage": "http://localhost/kyoshibeauty/",
   "version": "0.0.0",
-  "homepage": "https://kyoshibeauty.com/",
   "type": "module",
   "scripts": {
     "dev": "vite",

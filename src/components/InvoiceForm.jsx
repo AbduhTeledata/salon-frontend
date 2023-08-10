@@ -14,6 +14,7 @@ import InvoiceItem from '../components/InvoiceItem'
 import printJS from "print-js";
 import PropTypes from "prop-types";
 import InvoiceToModal from './InvoiceToModal';
+import { json } from 'react-router-dom';
 
 const date = new Date();
 const today = date.toLocaleDateString('en-GB', {
@@ -33,7 +34,7 @@ const InvoiceForm = (props) => {
   const [customerName, setCustomerName] = useState('');
   const [branchId, setBranchId] = useState('');
   const [kodemember, setKodeMember] = useState('');
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState("note");
   const [terapis, setTerapis] = useState('');
   const [productId, setProductId] = useState('');
   const [productName, setProductName] = useState('');
@@ -49,11 +50,29 @@ const InvoiceForm = (props) => {
   const [msg, setMsg] = useState("");
   const [items, setItems] = useState([]);
   const [newdiscount, setNewDiscount] = useState(0);
+  const [subtotalprint, setSubTotalPrint] = useState(0);
+  const [orders, setOrders] = useState([]);
 
   // const [kembali, setKembali] = useState('');
   // const [total, setTotal] = useState('');
   // const [subtotal, setSubTotal] = useState('');
   // const [total,setTotal]=useState('');
+
+  const fetchOrder = async() => {
+    const result = await axios.get(API_URL + 'orders');
+    setOrders(await result.data);
+    // setAllOrders(await result.data);
+    
+    console.log('Order',result);
+  }
+
+  useEffect(() => {
+    fetchOrder();  
+  }, []);
+
+  // const parsedJSON = json.parse(orders);
+  // const lastRow = orders[orders.length -1];
+  // console.log('lastInvoiceNumber', lastRow.inv_code);
   
   useEffect(() => {
     console.log('newItems', items);
@@ -64,8 +83,21 @@ const InvoiceForm = (props) => {
       let  newdiscount = 0;
       setNewDiscount( newdiscount = discount/items.length);
     };
+    // const highestPrice = items.map((item) => {
+    //   for (const key in item) {
+    //     if (key === item.price && item.price > item.price[key]) {
+    //       // item[key] = editedItem.value;
+    //       setQty(item[key] = editedItem.value);
+    //     }
+    //   }
+    // return item;
+    // });
     // setDiscount(discount);
+    
+    // console.log('newtotal',newtotal)
+    // console.log('newsubtotal', newsubtotal)
   });
+
 
   const saveOrder = async (e) => {
     e.preventDefault();
@@ -129,49 +161,43 @@ const InvoiceForm = (props) => {
     const newQty = items.map((item) => {
       for (const key in item) {
         if (key === editedItem.name && editedItem.id === item.id) {
-          item[key] = editedItem.value;
+          // item[key] = editedItem.value;
+          setQty(item[key] = editedItem.value);
         }
       }
-    // return item.qty;
+    return item.qty;
     });
-    setQty(newQty);
-    setItems(newItems);
+    
+    // setQty(newQty);
+    console.log("qty",newQty);
+    // setItems(newItems);
     // setQty(newItems.qty);
     // setProductName(newItems.name);
-    console.log("edit newitems:", newItems);
+    // console.log("edit newitems:", newItems);
   };
 
   function printTest() {
     printJS({
       printable: 'invprint',
       type: 'html',
-      css: './src/PrintStruk.css'
+      css: './public/PrintStruk.css'
     });
     setDiscount(0);
     setQty('');
     setItems([]);
+    setInvoiceNumber((prevNumber) => invoiceToNumber(prevNumber));
   }
   const componentRef = useRef(null);
+
   const handleReactToPrint = useReactToPrint({
-    pageStyle: "@page { size: 2.5in 4in }",
-    content: () => componentRef.current,
-    copyStyles: "false",
+    content: () => componentRef.current
   });
   
-  const handlePrint = () => {
-    setInvoiceNumber((prevNumber) => invoiceToNumber(prevNumber));
-    setDiscount(0);
-    setQty('');
-    setItems([]);
-    handleReactToPrint();
-    // openWindow(() => handleReactToPrint());
-  }
- 
   const deleteItemHandler = (id) => {
     setItems((prevItem) => prevItem.filter((item) => item.id !== id));
   };
 
-
+  //Subtotal dan Total untuk printout customer
   const subtotal = items.reduce((prev, curr) => {
     if (curr.name.trim().length > 0)
       return prev + Number(curr.price * Math.floor(curr.qty));
@@ -179,65 +205,56 @@ const InvoiceForm = (props) => {
   }, 0);
 
   const total = subtotal - discount;
- 
   const kembali = tunai - total;
 
+  //Sub Total dan Total untuk report
   const newsubtotal = items.reduce((prev, curr) => {
     if (curr.name.trim().length > 0)
       return prev = Number(curr.price * Math.floor(curr.qty));
     else return prev;
   }, 0);
 
-  const newtotal = newsubtotal - discount;
+  const newtotal = newsubtotal - newdiscount; 
 
-  const subdiscount = items.reduce((prev, curr) => {
-    if (curr.name.trim().length > 0)
-      return prev + Number(curr.price * Math.floor(curr.qty));
-    else return prev;
-  }, 0);
+  // const subdiscount = items.reduce((prev, curr) => {
+  //   if (curr.name.trim().length > 0)
+  //     return prev + Number(curr.price * Math.floor(curr.qty));
+  //   else return prev;
+  // }, 0);
 
-  const values_discount = (e) => {
-    let name= e.target.name;
-    let value= e.target.value;
-    const newValues = {
-      ...values, [name]: value
-    }
-    setDiscount(newValues);
-    console.log(newValues);
-  }
-  const itemqty = items.reduce((acc, cur) => {
-    acc += cur.qty;
-    return acc;
-  }, 0);
+  // const itemqty = items.reduce((acc, cur) => {
+  //   acc += cur.qty;
+  //   return acc;
+  // }, 0);
+
+  // const values_discount = (e) => {
+  //   let name= e.target.name;
+  //   let value= e.target.value;
+  //   const newValues = {
+  //     ...values, [name]: value
+  //   }
+  //   setDiscount(newValues);
+  //   console.log(newValues);
+  // }
+ 
   // const taxRate = (tax * subtotal) / 100;
   // const discountRate = (discount * subtotal) / 100;
-const [values, set_values] = useState({
-    tunai:'',
-    kembali:'',
-    total:total,
-    discount: '',
-})
-const values_handler = (e) => {
-    let name= e.target.name;
-    let value= e.target.value;
-    const newValues = {
-      ...values, [name]: value
-    }
-    set_values(newValues);
-    setTunai(newValues);
-
-    // Calling the method to sum the value
-    // calc_total(newValues) 
-    console.log(newValues)
-}
-
-const [newKembali,setNewKembali] = useState(0);
+// const [newKembali,setNewKembali] = useState(0);
 
 // const calc_total = (newValues) => {
 //     let {tunai, discount} = newValues;
 //     newKembali = parseInt(tunai) - parseInt(discount);
 //     setNewKembali(newKembali)
 // }
+
+// const handlePrint = () => {
+  //   setInvoiceNumber((prevNumber) => invoiceToNumber(prevNumber));
+  //   setDiscount(0);
+  //   setQty('');
+  //   setItems([]);
+  //   handleReactToPrint();
+  //   // openWindow(() => handleReactToPrint());
+  // }
  
   return (
     <div>
@@ -457,6 +474,7 @@ const [newKembali,setNewKembali] = useState(0);
                 customerName={customerName}
                 discount={discount}
                 items={items} 
+                subtotal={subtotal}
                 total={total} 
                 note={note}
                 tunai={tunai}

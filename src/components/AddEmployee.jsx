@@ -5,7 +5,10 @@ import Modal from 'react-bootstrap/Modal';
 
 const AddEmployee = (props) => {
     const [name, setName] = useState('');
+    const [address, setAddress] = useState('');
     const [role, setRole] = useState('');
+    const [phone, setPhone] = useState('');
+    const [branchId, setBranchId] = useState('');
     const [img, setImg] = useState('');
 
     const [show, setShow] = useState(false);
@@ -18,7 +21,7 @@ const AddEmployee = (props) => {
         onClick={handleShow}
         className="block mx-auto m-2 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
       >
-          + Add Employee
+          + Tambah
       </button>
 
       <Modal
@@ -34,9 +37,11 @@ const AddEmployee = (props) => {
             <form onSubmit={(e) => {
                 e.preventDefault();
                 setName('');
+                setAddress('');
+                setPhone('');
                 setRole('');
                 setImg('');
-                props.newEmployee(name, role, img);
+                props.newEmployee(name, address, phone, role, img);
             }}
                 id='editmodal' 
                 className="w-full max-w-sm">
@@ -45,7 +50,7 @@ const AddEmployee = (props) => {
                         <label 
                             className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" 
                             htmlFor="name">
-                            Full Name
+                            Nama
                         </label>
                     </div>
                     <div className="md:w-2/3">
@@ -57,6 +62,50 @@ const AddEmployee = (props) => {
                             value={name}
                             onChange={(e) => {
                                 setName(e.target.value)
+                            }}
+                            
+                        />
+                    </div>
+                </div>
+                <div className="md:flex md:items-center mb-6">
+                    <div className="md:w-1/3">
+                        <label 
+                            className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" 
+                            htmlFor="address">
+                            Alamat
+                        </label>
+                    </div>
+                    <div className="md:w-2/3">
+                        <input 
+                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
+                            id="address" 
+                            placeholder='Alamat'
+                            type="text" 
+                            value={address}
+                            onChange={(e) => {
+                                setAddress(e.target.value)
+                            }}
+                            
+                        />
+                    </div>
+                </div>
+                <div className="md:flex md:items-center mb-6">
+                    <div className="md:w-1/3">
+                        <label 
+                            className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" 
+                            htmlFor="phone">
+                            Telepon/WA
+                        </label>
+                    </div>
+                    <div className="md:w-2/3">
+                        <input 
+                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
+                            id="phone" 
+                            placeholder='Telepon/WA'
+                            type="text" 
+                            value={phone}
+                            onChange={(e) => {
+                                setPhone(e.target.value)
                             }}
                             
                         />
@@ -80,6 +129,28 @@ const AddEmployee = (props) => {
                             onChange={(e) => {
                                 setRole(e.target.value)
                             }}
+                        />
+                    </div>
+                </div>
+                <div className="md:flex md:items-center mb-6">
+                    <div className="md:w-1/3">
+                        <label 
+                            className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" 
+                            htmlFor="branch">
+                            Cabang
+                        </label>
+                    </div>
+                    <div className="md:w-2/3">
+                        <input 
+                            className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
+                            id="branch" 
+                            placeholder='Cabang'
+                            type="text" 
+                            value={branchId}
+                            onChange={(e) => {
+                                setBranchId(e.target.value)
+                            }}
+                            
                         />
                     </div>
                 </div>
@@ -111,14 +182,14 @@ const AddEmployee = (props) => {
             className='bg-slate-400 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded' 
             onClick={handleClose}
           >
-            Close
+            Tutup
           </button>
           <button 
             className='bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded' 
             onClick={handleClose}
             form='editmodal'
           >
-            Add
+            Simpan
           </button>
         </Modal.Footer>
       </Modal>

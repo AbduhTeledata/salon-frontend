@@ -24,6 +24,7 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
         discount,
         items,
         total,
+        subtotal,
         note,
         tunai,
         kembali} = props;
@@ -96,13 +97,20 @@ export const ComponentToPrint = React.forwardRef((props, ref) => {
                   </div>
                   <div className="mb-0 mt-0 grid grid-cols-2">
                       <div className="parent">
+                        <span className="childkiri">TOTAL</span>
+                        <span class="childkanan">{numberWithCommas(subtotal)}</span>
+                       </div>
+                  </div>
+                  <div className="mb-0 mt-0 grid grid-cols-2">
+                      <div className="parent">
                         <span className="childkiri">DISCOUNT</span>
                         <span class="childkanan">{numberWithCommas(discount)}</span>
+                        <label className="childkiri">========================</label>
                        </div>
                   </div>
                   <div className="parent">
                       <div className="parent">
-                        <span className="childkiri">TOTAL</span>
+                        <span className="childkiri">JUMLAH TOTAL</span>
                         <span className="childkanan">
                         {numberWithCommas(total) % 1 === 0
                           ? numberWithCommas(total)
